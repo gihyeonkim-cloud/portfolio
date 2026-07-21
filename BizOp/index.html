@@ -67,6 +67,18 @@
   .numlist li{position:relative;padding-left:24px;margin-bottom:9px;color:var(--navy);line-height:1.5;}
   .numlist li::before{counter-increment:nl;content:counter(nl) ".";position:absolute;left:0;top:0;font-weight:700;}
   .ghostnum{position:absolute;right:70px;top:108px;font-size:128px;font-weight:800;color:var(--accent);line-height:1;font-family:'Pretendard Variable',sans-serif;}
+
+  /* deck-level navigation */
+  .sidenav{position:fixed;right:16px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;align-items:center;gap:7px;z-index:60;}
+  .sidenav .dot{width:8px;height:8px;border-radius:50%;background:#C7CAD1;cursor:pointer;transition:background .15s,transform .15s;flex:none;}
+  .sidenav .dot:hover{background:#4B5980;}
+  .sidenav .dot.active{background:#092C68;transform:scale(1.4);}
+  .navbtns{position:fixed;right:18px;bottom:26px;display:flex;flex-direction:column;gap:10px;z-index:60;}
+  .navbtns button{width:42px;height:42px;border-radius:50%;border:1px solid #D5D7DB;background:#fff;box-shadow:0 2px 10px rgba(20,25,50,.16);cursor:pointer;font-size:17px;color:#1A2340;display:flex;align-items:center;justify-content:center;font-family:inherit;}
+  .navbtns button:hover{background:#F1F2F4;}
+  .navbtns button:disabled{opacity:.3;cursor:default;}
+  .navhint{position:fixed;left:16px;bottom:16px;font-size:11.5px;color:#9A9CA3;z-index:60;background:rgba(255,255,255,.75);padding:3px 8px;border-radius:10px;}
+  @media (max-width:980px){ .sidenav{display:none;} }
 </style>
 </head>
 <body>
@@ -77,6 +89,13 @@
 </div>
 
 <div id="deck"></div>
+
+<div class="sidenav" id="sidenav"></div>
+<div class="navbtns">
+  <button id="nav-prev" title="이전 페이지 (↑)">▲</button>
+  <button id="nav-next" title="다음 페이지 (↓)">▼</button>
+</div>
+<div class="navhint">↑↓ 또는 PageUp/PageDown으로 이동 · 우측 점을 클릭해 페이지 이동</div>
 
 <script>
 const IN = 96;                // px per inch (canvas is 13.333in x 7.5in == 1280x720)
@@ -749,11 +768,11 @@ projectOverview(12,2,P2_SUB,"2","PROJECT 02","B2G","플랫폼 도입·확장 운
     MX/IN, 5.0, 10.8, 0.5, {fs:16, color:"var(--navy)", lh:1.5});
   textBlock(s,"감사합니다.", MX/IN, 5.65, 10.8, 0.4, {fs:16, color:"var(--navy)"});
 
-  s.appendChild(el("div","divider",{top:px(6.55*IN)}));
-  textBlock(s,"EMAIL", MX/IN, 6.7, 3, 0.28, {fs:13.3, color:"var(--gray-light)"});
-  textBlock(s,"kimkh1212@gmail.com", MX/IN, 6.97, 4, 0.35, {fs:17.3, bold:true});
-  textBlock(s,"PHONE", MX/IN+4.2, 6.7, 3, 0.28, {fs:13.3, color:"var(--gray-light)"});
-  textBlock(s,"010-3669-9464", MX/IN+4.2, 6.97, 3, 0.35, {fs:17.3, bold:true});
+  s.appendChild(el("div","divider",{top:px(6.3*IN)}));
+  textBlock(s,"EMAIL", MX/IN, 6.42, 3, 0.24, {fs:13.3, color:"var(--gray-light)"});
+  textBlock(s,"kimkh1212@gmail.com", MX/IN, 6.63, 4, 0.3, {fs:17.3, bold:true});
+  textBlock(s,"PHONE", MX/IN+4.2, 6.42, 3, 0.24, {fs:13.3, color:"var(--gray-light)"});
+  textBlock(s,"010-3669-9464", MX/IN+4.2, 6.63, 3, 0.3, {fs:17.3, bold:true});
   bottomProgress(s,18);
 }
 
@@ -770,15 +789,55 @@ rescale();
 
 const topbarPage = document.getElementById("topbar-page");
 const wraps = Array.from(document.querySelectorAll(".slide-wrap"));
+let currentIdx = 0; // 0-based
+
+function goToSlide(idx){
+  idx = Math.max(0, Math.min(wraps.length-1, idx));
+  wraps[idx].scrollIntoView({behavior:"smooth", block:"start"});
+}
+
+/* ---- side dot navigation ---- */
+const sidenav = document.getElementById("sidenav");
+wraps.forEach((w,i)=>{
+  const dot = document.createElement("div");
+  dot.className = "dot" + (i===0? " active":"");
+  dot.title = `${i+1} / ${wraps.length}`;
+  dot.addEventListener("click", ()=> goToSlide(i));
+  sidenav.appendChild(dot);
+});
+const navDots = Array.from(sidenav.children);
+
+function setActive(idx){
+  currentIdx = idx;
+  topbarPage.textContent = `${idx+1} / ${wraps.length}`;
+  navDots.forEach((d,i)=> d.classList.toggle("active", i===idx));
+  document.getElementById("nav-prev").disabled = idx===0;
+  document.getElementById("nav-next").disabled = idx===wraps.length-1;
+}
+
 const io = new IntersectionObserver((entries)=>{
   entries.forEach(en=>{
     if(en.isIntersecting){
-      const idx = wraps.indexOf(en.target) + 1;
-      topbarPage.textContent = `${idx} / 18`;
+      const idx = wraps.indexOf(en.target);
+      setActive(idx);
     }
   });
 }, {threshold:0.5});
 wraps.forEach(w=>io.observe(w));
+
+/* ---- prev/next buttons ---- */
+document.getElementById("nav-prev").addEventListener("click", ()=> goToSlide(currentIdx-1));
+document.getElementById("nav-next").addEventListener("click", ()=> goToSlide(currentIdx+1));
+
+/* ---- keyboard navigation ---- */
+window.addEventListener("keydown", (e)=>{
+  if(["ArrowDown","ArrowRight","PageDown"].includes(e.key)){ e.preventDefault(); goToSlide(currentIdx+1); }
+  else if(["ArrowUp","ArrowLeft","PageUp"].includes(e.key)){ e.preventDefault(); goToSlide(currentIdx-1); }
+  else if(e.key==="Home"){ e.preventDefault(); goToSlide(0); }
+  else if(e.key==="End"){ e.preventDefault(); goToSlide(wraps.length-1); }
+});
+
+setActive(0);
 </script>
 </body>
 </html>
