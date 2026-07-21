@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Business Operations PM Portfolio — 김기현</title>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.css">
+<style>
+  :root{
+    --bg:#FAFAFA; --navy:#1A2340; --accent:#092C68; --blue-muted:#4B5980;
+    --gray-body:#55585C; --gray-light:#9A9CA3; --line:#E3E3E3; --card-bg:#F1F2F4;
+    --status-red:#B23A3A; --status-gray:#9A9CA3; --head-border:#D5D7DB;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:#e9eaec;font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Malgun Gothic',sans-serif;}
+  #topbar{position:sticky;top:0;z-index:50;background:#1A2340;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:10px 20px;font-size:13px;letter-spacing:.02em;}
+  #topbar .name{font-weight:700;}
+  #topbar .pageno{color:#9FB0D8;font-variant-numeric:tabular-nums;}
+  #deck{max-width:1280px;margin:24px auto 80px;display:flex;flex-direction:column;gap:28px;padding:0 12px;}
+  .slide-wrap{position:relative;width:100%;aspect-ratio:1280/720;background:#FAFAFA;box-shadow:0 2px 18px rgba(20,25,50,.12);border-radius:4px;overflow:hidden;}
+  .slide{position:absolute;top:0;left:0;width:1280px;height:720px;transform-origin:top left;background:var(--bg);}
+  .abs{position:absolute;}
+  .band{position:absolute;top:0;left:0;width:1280px;height:15px;background:var(--accent);}
+  /* breadcrumb */
+  .crumb{position:absolute;top:40px;left:82px;right:82px;height:29px;display:flex;align-items:center;font-size:14px;letter-spacing:.02em;color:var(--gray-light);}
+  .crumb .item{white-space:nowrap;}
+  .crumb .item.active{color:var(--navy);font-weight:700;}
+  .crumb .sep{margin:0 10px;color:var(--gray-light);}
+  .crumb .pageno{margin-left:auto;color:var(--gray-light);font-size:14px;}
+  /* subnav */
+  .subnav{position:absolute;top:75px;left:82px;right:82px;height:27px;display:flex;align-items:center;gap:22px;font-size:13.3px;color:var(--gray-light);}
+  .subnav .item.active{color:var(--navy);font-weight:700;}
+  .subnav-line{position:absolute;top:101px;left:82px;right:82px;height:1px;background:var(--line);}
+  .subnav-dots{position:absolute;top:97px;left:82px;right:82px;height:9px;}
+  .sdot{position:absolute;top:0;width:9px;height:9px;border-radius:50%;background:var(--bg);border:1px solid var(--gray-light);transform:translate(-50%,0);}
+  .sdot.active{width:12px;height:12px;background:var(--accent);border-color:var(--accent);margin-top:-1.5px;}
+  /* page title / desc */
+  .ptitle{position:absolute;left:82px;font-size:26.7px;font-weight:800;color:var(--accent);}
+  .ptitle .num{margin-right:12px;}
+  .pdesc{position:absolute;left:82px;right:82px;font-size:20px;color:var(--gray-body);line-height:1.5;}
+  .divider{position:absolute;left:82px;right:82px;height:1px;background:var(--line);}
+  .vline{position:absolute;width:1px;background:var(--line);}
+  /* bottom progress */
+  .bottomline{position:absolute;left:82px;right:82px;bottom:34px;height:1px;background:var(--line);}
+  .bottomdot{position:absolute;bottom:30.5px;width:9px;height:9px;border-radius:50%;background:var(--accent);}
+  /* tables */
+  table.pf{border-collapse:collapse;width:100%;}
+  table.pf th{background:var(--card-bg);color:var(--navy);font-weight:700;font-size:16.5px;text-align:center;padding:10px 12px;border-bottom:1.3px solid var(--head-border);}
+  table.pf td{color:var(--gray-body);font-size:13px;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:middle;}
+  table.pf td.lbl{color:var(--navy);font-weight:700;text-align:center;}
+  table.pf.left td.lbl{text-align:left;}
+  /* callout */
+  .callout{position:absolute;background:var(--card-bg);border-radius:6px;display:flex;align-items:center;padding:0 28px;gap:18px;}
+  .callout .dot{flex:none;width:22px;height:22px;border-radius:50%;background:var(--accent);}
+  .callout .lbl{flex:none;width:90px;font-weight:700;color:var(--blue-muted);font-size:14px;}
+  .callout .txt{font-weight:700;color:var(--navy);line-height:1.5;}
+  /* chips */
+  .chip{display:inline-flex;align-items:center;justify-content:center;border:1px solid #C7CAD1;border-radius:18px;color:var(--navy);font-weight:700;font-size:13.3px;padding:8px 16px;background:var(--bg);white-space:nowrap;}
+  .statchip{position:absolute;background:var(--card-bg);display:flex;align-items:center;padding-left:22px;font-weight:700;color:var(--navy);font-size:14.7px;white-space:nowrap;}
+  .statchip::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--accent);}
+  /* emphasis spans inside body: color only, no bold */
+  .b{font-weight:400;color:var(--navy);}
+  .bullets{list-style:none;margin:0;padding:0;}
+  .bullets li{position:relative;padding-left:18px;margin-bottom:11px;color:var(--gray-body);line-height:1.5;}
+  .bullets li::before{content:"—";position:absolute;left:0;top:0;color:var(--gray-body);}
+  .numlist{list-style:none;margin:0;padding:0;counter-reset:nl;}
+  .numlist li{position:relative;padding-left:24px;margin-bottom:9px;color:var(--navy);line-height:1.5;}
+  .numlist li::before{counter-increment:nl;content:counter(nl) ".";position:absolute;left:0;top:0;font-weight:700;}
+  .ghostnum{position:absolute;right:70px;top:108px;font-size:128px;font-weight:800;color:var(--accent);line-height:1;font-family:'Pretendard Variable',sans-serif;}
+</style>
+</head>
+<body>
+
+<div id="topbar">
+  <div class="name">김기현 · Business Operations PM Portfolio</div>
+  <div class="pageno" id="topbar-page">1 / 18</div>
+</div>
+
+<div id="deck"></div>
+
+<script>
+const IN = 96;                // px per inch (canvas is 13.333in x 7.5in == 1280x720)
+const PT = (v) => v * (4/3);  // pt -> px
+const MX = 0.85 * IN;         // left/right margin px = 81.6
+const CW = 1280 - 2 * MX;     // content width px
+
+const SECTIONS = ["PROFILE","PROJECT 01","PROJECT 02","ASSETS","CLOSING"];
+const TOTAL = 18;
+
+function el(tag, cls, styleObj){
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (styleObj) Object.assign(e.style, styleObj);
+  return e;
+}
+function px(v){ return v + "px"; }
+
+function newSlide(){
+  const wrap = el("div","slide-wrap");
+  const slide = el("div","slide");
+  wrap.appendChild(slide);
+  document.getElementById("deck").appendChild(wrap);
+  return slide;
+}
+
+function band(slide){
+  slide.appendChild(el("div","band"));
+}
+
+function crumb(slide, activeIdx, pageNum){
+  const c = el("div","crumb");
+  SECTIONS.forEach((label,i)=>{
+    if(i>0) c.appendChild(el("span","sep",{})).textContent = "›";
+    const it = el("span","item"+(i===activeIdx?" active":""));
+    it.textContent = label;
+    c.appendChild(it);
+  });
+  const p = el("span","pageno");
+  p.textContent = `${pageNum} / ${TOTAL}`;
+  c.appendChild(p);
+  slide.appendChild(c);
+}
+
+function subNav(slide, items, activeIdx){
+  const n = el("div","subnav");
+  items.forEach((label,i)=>{
+    const it = el("span","item"+(i===activeIdx?" active":""));
+    it.textContent = label;
+    n.appendChild(it);
+  });
+  slide.appendChild(n);
+  slide.appendChild(el("div","subnav-line"));
+  const dotsWrap = el("div","subnav-dots");
+  const cnt = items.length;
+  items.forEach((_,i)=>{
+    const d = el("div","sdot"+(i===activeIdx?" active":""));
+    const leftPct = cnt===1 ? 0 : (i/(cnt-1))*100;
+    d.style.left = `calc(${leftPct}% )`;
+    dotsWrap.appendChild(d);
+  });
+  slide.appendChild(dotsWrap);
+}
+
+function contentHeader(slide, mainIdx, pageNum, subItems, subIdx){
+  crumb(slide, mainIdx, pageNum);
+  if (subItems) subNav(slide, subItems, subIdx);
+  else slide.appendChild(el("div","divider",{top:px(0.85*IN)}));
+}
+
+function pageTitle(slide, num, text, y){
+  const t = el("div","ptitle",{top:px(y*IN)});
+  t.innerHTML = `<span class="num">${num}</span>${text}`;
+  slide.appendChild(t);
+}
+function pageDesc(slide, text, y, h){
+  const d = el("div","pdesc",{top:px(y*IN)});
+  if (h) d.style.height = px(h*IN);
+  d.innerHTML = text;
+  slide.appendChild(d);
+}
+function bottomProgress(slide, pageNum){
+  slide.appendChild(el("div","bottomline"));
+  const frac = (pageNum-1)/(TOTAL-1);
+  const dot = el("div","bottomdot",{left: px(MX + (CW-9)*frac)});
+  slide.appendChild(dot);
+}
+function calloutBox(slide,label,html,x,y,w,h,fs){
+  const box = el("div","callout",{left:px(x*IN),top:px(y*IN),width:px(w*IN),height:px(h*IN)});
+  const dot = el("div","dot");
+  const lbl = el("div","lbl"); lbl.textContent = label;
+  const txt = el("div","txt",{fontSize:px(fs||14)}); txt.innerHTML = html;
+  box.appendChild(dot); box.appendChild(lbl); box.appendChild(txt);
+  slide.appendChild(box);
+}
+function bulletList(slide, items, x, y, w, fs){
+  const ul = el("ul","bullets",{position:"absolute",left:px(x*IN),top:px(y*IN),width:px(w*IN),fontSize:px(fs||16)});
+  items.forEach(t=>{ const li=document.createElement("li"); li.innerHTML=t; ul.appendChild(li); });
+  slide.appendChild(ul);
+}
+function numberedList(slide, items, x, y, w, fs){
+  const ol = el("ol","numlist",{position:"absolute",left:px(x*IN),top:px(y*IN),width:px(w*IN),fontSize:px(fs||15.3)});
+  items.forEach(t=>{ const li=document.createElement("li"); li.innerHTML=t; ol.appendChild(li); });
+  slide.appendChild(ol);
+}
+function dataRow(slide, label, y, labelW){
+  const l = el("div",null,{position:"absolute",left:px(MX),top:px(y*IN),width:px((labelW||1.7)*IN),fontSize:"16px",fontWeight:700,color:"var(--navy)"});
+  l.textContent = label;
+  slide.appendChild(l);
+}
+function textBlock(slide, html, x, y, w, h, opts){
+  opts = opts||{};
+  const d = el("div",null,{position:"absolute",left:px(x*IN),top:px(y*IN),width:px(w*IN),
+    fontSize:px(opts.fs||16), color:opts.color||"var(--navy)", fontWeight:opts.bold?700:400,
+    lineHeight:opts.lh||1.5});
+  if(h) d.style.height=px(h*IN);
+  d.innerHTML = html;
+  slide.appendChild(d);
+}
+function buildTable(slide, headers, rows, x, y, w, colW, opts){
+  opts = opts||{};
+  const wrapper = el("div",null,{position:"absolute",left:px(x*IN),top:px(y*IN),width:px(w*IN)});
+  const table = document.createElement("table");
+  table.className = "pf" + (opts.leftFirst? " left":"");
+  const totalColW = colW.reduce((a,b)=>a+b,0);
+  const colgroup = document.createElement("colgroup");
+  colW.forEach(cw=>{ const c=document.createElement("col"); c.style.width=(cw/totalColW*100)+"%"; colgroup.appendChild(c); });
+  table.appendChild(colgroup);
+  const thead = document.createElement("thead");
+  const htr = document.createElement("tr");
+  headers.forEach(h=>{ const th=document.createElement("th"); th.textContent=h; if(opts.headFs) th.style.fontSize=px(opts.headFs); if(opts.padY!=null) th.style.padding=px(opts.padY)+" 12px"; htr.appendChild(th); });
+  thead.appendChild(htr); table.appendChild(thead);
+  const tbody = document.createElement("tbody");
+  rows.forEach(r=>{
+    const tr = document.createElement("tr");
+    r.forEach((cell,ci)=>{
+      const td = document.createElement("td");
+      if(ci===0 && opts.boldFirst) td.className="lbl";
+      if(opts.bodyFs) td.style.fontSize=px(opts.bodyFs);
+      if(opts.padY!=null) td.style.padding=px(opts.padY)+" 12px";
+      if(opts.lh) td.style.lineHeight=opts.lh;
+      if (typeof cell === "object"){ td.innerHTML = cell.html; if(cell.style) Object.assign(td.style, cell.style); }
+      else td.textContent = cell;
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+  table.appendChild(tbody);
+  wrapper.appendChild(table);
+  slide.appendChild(wrapper);
+}
+function chipsRow(slide, items, x, y, fs){
+  let cx = x;
+  items.forEach(c=>{
+    const chip = el("span","chip",{fontSize:px(fs||13.3)});
+    chip.textContent = c;
+    chip.style.position="absolute";
+    chip.style.left=px(cx*IN);
+    chip.style.top=px(y*IN);
+    slide.appendChild(chip);
+    // measure after append is tricky pre-layout; approximate width
+    const approxW = c.length*0.105+0.42;
+    cx += approxW + 0.15;
+  });
+}
+function statChips(slide, items, x, y){
+  let cx = x;
+  items.forEach(st=>{
+    const w = st.length*0.115+0.5;
+    const chip = el("div","statchip",{left:px(cx*IN),top:px(y*IN),width:px(w*IN),height:px(0.5*IN)});
+    chip.textContent = st;
+    slide.appendChild(chip);
+    cx += w + 0.22;
+  });
+}
+
+/* ---------------- Project Overview builder ---------------- */
+function projectOverview(pageNum, mainIdx, subItems, ghostNum, projLabel, prefix, rest, overview, doneText, period, role, stats){
+  const s = newSlide();
+  band(s);
+  contentHeader(s, mainIdx, pageNum, subItems, 0);
+
+  const gn = el("div","ghostnum"); gn.textContent = ghostNum;
+  s.appendChild(gn);
+
+  const tick = el("div",null,{position:"absolute",left:px(MX),top:px(1.32*IN),width:"4px",height:px(0.3*IN),background:"var(--accent)"});
+  s.appendChild(tick);
+  const lbl = el("div",null,{position:"absolute",left:px(MX+0.2*IN),top:px(1.26*IN),fontSize:"20px",fontWeight:700,color:"var(--accent)",letterSpacing:".03em"});
+  lbl.textContent = projLabel;
+  s.appendChild(lbl);
+
+  const title = el("div",null,{position:"absolute",left:px(MX),top:px(1.66*IN),width:px(9.3*IN),fontSize:"40px",fontWeight:800,lineHeight:1.15});
+  title.innerHTML = `<span style="color:var(--accent)">${prefix}</span> <span style="color:var(--navy)">${rest}</span>`;
+  s.appendChild(title);
+
+  textBlock(s, "개요", MX/IN, 2.8, 1.5, 0.28, {fs:14, bold:true, color:"var(--blue-muted)"});
+  textBlock(s, overview, MX/IN, 3.07, 9.7, 0.7, {fs:16.6, lh:1.5});
+
+  textBlock(s, "직접 수행", MX/IN, 3.96, 3, 0.28, {fs:14, bold:true, color:"var(--blue-muted)"});
+  textBlock(s, doneText, MX/IN, 4.22, 9.7, 0.65, {fs:16, lh:1.5});
+
+  if (stats && stats.length) statChips(s, stats, MX/IN, 5.12);
+
+  s.appendChild(el("div","divider",{top:px(5.9*IN)}));
+  textBlock(s, "기간", MX/IN, 6.03, 3, 0.24, {fs:13.3, color:"var(--gray-light)"});
+  textBlock(s, period, MX/IN, 6.27, 3.4, 0.4, {fs:18.6, bold:true});
+  textBlock(s, "역할", MX/IN+3.6, 6.03, 3, 0.24, {fs:13.3, color:"var(--gray-light)"});
+  textBlock(s, role, MX/IN+3.6, 6.27, 4, 0.4, {fs:18.6, bold:true});
+
+  bottomProgress(s, pageNum);
+  return s;
+}
+
+/* ================= SLIDE DATA ================= */
+const PROFILE_SUB = ["01 포지셔닝","02 경력 흐름","03 업무 범위","04 KPI·성과","05 일하는 방식"];
+const P1_SUB = ["01 개요","02 상황·과제","03 데이터 구조화","04 성과"];
+const P2_SUB = ["01 개요","02 상황·과제","03 데이터 기반 액션","04 진단·조치","05 확장"];
+
+/* ---- 1. Cover ---- */
+{
+  const s = newSlide();
+  band(s);
+  textBlock(s,"BUSINESS OPERATIONS PM PORTFOLIO", MX/IN, 1.0, 8, 0.35, {fs:16, bold:true, color:"var(--navy)"});
+  s.appendChild(el("div",null,{position:"absolute",left:px(MX),top:px(1.42*IN),width:px(0.55*IN),height:"2px",background:"var(--navy)"}));
+
+  textBlock(s,"Business Operations<br>PM Portfolio", MX/IN, 1.72, 10.5, 1.8, {fs:56, bold:true, color:"var(--accent)", lh:1.15});
+  textBlock(s,"데이터로 문제를 진단하고, 운영체계로 사업을 확장합니다", MX/IN, 3.53, 9, 0.4, {fs:18.6, color:"var(--gray-body)"});
+
+  const contact = el("div",null,{position:"absolute",left:px(MX),top:px(4.22*IN),width:px(11*IN),fontSize:"20px"});
+  contact.innerHTML = `<b style="color:var(--navy)">김기현</b> <span style="color:var(--gray-light)">|</span> <span style="color:var(--blue-muted)">Business Operations PM</span> <span style="color:var(--gray-light)">|</span> <span style="color:var(--blue-muted)">kimkh1212@gmail.com</span> <span style="color:var(--gray-light)">|</span> <span style="color:var(--blue-muted)">010 3669 9464</span>`;
+  s.appendChild(contact);
+
+  s.appendChild(el("div",null,{position:"absolute",left:px(MX),top:px(4.85*IN),width:px(5.6*IN),height:"1px",background:"var(--line)"}));
+  textBlock(s,"B2B 신규 프로그램 운영에서 재이용률 4배, 운영 고객 규모 6배 개선을 만들었고,<br>5개 현장 파일럿을 400개 현장·약 20만 명 규모로 확장하는 운영 데이터 체계를 구축했습니다.", MX/IN, 5.05, 10.3, 0.7, {fs:16, color:"var(--gray-body)", lh:1.5});
+
+  s.appendChild(el("div","divider",{top:px((7.5-0.85)*IN)}));
+  textBlock(s,"B2C 상품기획 · B2B 신사업 운영 · B2G 플랫폼 확장", MX/IN, 7.5-0.6, 8, 0.35, {fs:16, bold:true});
+  const cp = el("div",null,{position:"absolute",right:px(MX),top:px((7.5-0.6)*IN),fontSize:"14px",color:"var(--gray-light)"});
+  cp.textContent = "Career Portfolio 2026";
+  s.appendChild(cp);
+}
+
+/* ---- 2. Contents ---- */
+{
+  const s = newSlide();
+  crumb(s,-1,2);
+  s.appendChild(el("div","divider",{top:px(0.85*IN)}));
+  textBlock(s,"Contents", MX/IN, 1.15, 4, 0.6, {fs:34.7, bold:true, color:"var(--accent)"});
+
+  function tocCard(y,h,num,title,desc,pageRange,items,itemGap){
+    const card = el("div",null,{position:"absolute",left:px(MX),top:px(y*IN),width:px(CW),height:px(h*IN),background:"var(--card-bg)",borderRadius:"6px"});
+    const n = el("div",null,{position:"absolute",left:"30px",top:"15px",fontSize:"61px",fontWeight:800,color:"#D9DBE0"}); n.textContent=num;
+    const t = el("div",null,{position:"absolute",left:"163px",top:"20px",fontSize:"18px",fontWeight:800,color:"var(--navy)",whiteSpace:"nowrap"}); t.textContent=title;
+    const d = el("div",null,{position:"absolute",left:"285px",top:"20px",width:px(CW-430),fontSize:"18px",color:"var(--gray-body)"}); d.innerHTML=desc;
+    const pl = el("div",null,{position:"absolute",right:"130px",top:"17px",fontSize:"13px",color:"var(--gray-light)",textAlign:"right"}); pl.textContent="PAGE";
+    const pr = el("div",null,{position:"absolute",right:"120px",top:"35px",fontSize:"20px",fontWeight:800,color:"var(--navy)",textAlign:"right"}); pr.textContent=pageRange;
+    card.appendChild(n); card.appendChild(t); card.appendChild(d); card.appendChild(pl); card.appendChild(pr);
+    items.forEach((it,i)=>{
+      const ry = 66 + i*itemGap;
+      const row = el("div",null,{position:"absolute",left:"163px",top:px(ry),width:px(CW-210),fontSize:"18px",color:"var(--gray-body)"});
+      row.innerHTML = it;
+      card.appendChild(row);
+    });
+    s.appendChild(card);
+  }
+  tocCard(1.95,2.45,"01","PROFILE","어떤 경험을 해왔고, 어떤 방식으로 일하는지 설명합니다.","03 – 07",[
+    "Positioning Summary — 핵심 역량과 강점 요약",
+    "Career Timeline — 경력의 확장 과정",
+    "Experience Map — 실제 수행한 업무 범위",
+    "KPI 및 성과지표 — 핵심 성과 요약",
+    "How I Work — 반복된 문제 해결 방식",
+  ],25);
+  tocCard(4.65,2.15,"02","PROJECTS","대표 프로젝트를 통해 신규 사업을 운영 가능한 구조로 만든 과정을 설명합니다.","08 – 18",[
+    "Project 01 · B2B NEW BUSINESS OPERATION — B2B 신규 프로그램(메가PT) 운영모델 구축",
+    "Project 02 · B2G PLATFORM ROLLOUT — 엘살바도르 공교육 플랫폼 도입·운영",
+    "Core Operating Assets — 두 프로젝트에서 반복적으로 만든 운영 산출물",
+    "Closing — 핵심 가치 제안",
+  ],23);
+}
+
+/* ---- 3. Positioning Summary ---- */
+{
+  const s = newSlide();
+  contentHeader(s,0,3,PROFILE_SUB,0);
+  pageTitle(s,"01","포지셔닝 요약",1.3);
+  pageDesc(s,"문제를 정확히 정의하고, 현장에서 실제로 작동하는 운영 구조를 만드는 것이 사업운영의 핵심이라고 생각합니다..<br>저는 B2B 신규 서비스와 B2G 플랫폼 도입 사업에서 이 역할에 필요한 문제 정의·데이터 진단·운영 개선 방식을 반복해서 실행해왔습니다.",1.8,0.62);
+
+  const cards = [
+    {t:"운영체계 설계", d:'<span class="b">B2B 신규 프로그램을 운영하며 고객관리 기준, 이용 활성화 프로세스, 운영 리포트 양식, 후속 조치 자동화 로직을 단계적으로 설계했습니다.</span> 담당자마다 달랐던 운영 방식을 하나의 운영 기준으로 표준화해 서비스 품질 편차를 줄였습니다.'},
+    {t:"데이터 기반 병목 식별 및 조치", d:'산재된 대량의 고객·운영 데이터를 Google Sheets·Coda 기반으로 정제해 계정 생성→접속→활성 이용→재이용 <span class="b">단계별 흐름을 추적할 수 있는 구조를 설계했습니다.</span> 각 단계에서 병목이 발생하는 구간을 식별하고, 해당 구간에 맞춘 후속 조치로 연결했습니다.'},
+    {t:"KPI 및 성과관리", d:'서비스 완료율, 재이용률, 유지율, 운영 고객 규모, 접속·활성 이용률을 핵심 지표로 설정하고, <span class="b">KPI를 지속적으로 추적하는 체계를 만들어 관리했습니다.</span> 개선 전후 변화를 운영 리포트와 대시보드에 정량적으로 기록해 의사결정 근거로 활용했습니다.'},
+    {t:"이해관계자 조율", d:'<span class="b">본사, 제휴사, 현지 파트너, 정부 담당 부처, 현장 담당자까지 역할이 다층적으로 분산</span>된 구조에서, <span class="b">\'책임·담당·협의·공유\' 기준으로 역할과 정보 흐름을 정리</span>해 데이터 수집과 운영 리포트 체계가 일관되게 작동하도록 조율했습니다.'},
+  ];
+  const gy=2.62, gh=1.95, gw=(CW/IN - 0.4)/2, gap=0.4;
+  cards.forEach((c,i)=>{
+    const cx = MX/IN + (i%2)*(gw+gap);
+    const cy = gy + Math.floor(i/2)*(gh+0.26);
+    textBlock(s, String(i+1).padStart(2,"0"), cx, cy, 0.7, 0.4, {fs:21.3, bold:true});
+    textBlock(s, c.t, cx+0.6, cy, gw-0.6, 0.4, {fs:18.6, bold:true});
+    s.appendChild(el("div",null,{position:"absolute",left:px(cx*IN),top:px((cy+0.45)*IN),width:px(gw*IN),height:"1px",background:"var(--line)"}));
+    textBlock(s, c.d, cx, cy+0.58, gw, gh-0.6, {fs:16, color:"var(--gray-body)", lh:1.55});
+  });
+  bottomProgress(s,3);
+}
+
+/* ---- 4. Career Timeline ---- */
+{
+  const s = newSlide();
+  contentHeader(s,0,4,PROFILE_SUB,1);
+  pageTitle(s,"02","경력의 확장 과정",1.3);
+
+  const stages = [
+    {d:"2020.11–2022.09", seg:"챔프스터디 · 공무원사업본부 기획팀(PL)", t:"B2C 상품기획", sub:"고객 반응·구매 데이터 기반 상품 구조·소구점 개선", add:"고객 반응 분석"},
+    {d:"2022.09–2023.07", seg:"Ihateflyingbugs(주) · B2C 서비스기획", t:"B2C 서비스기획", sub:"고객 피드백·이용 맥락 분석으로 서비스 제공 방식 개선", add:"고객 수요 분석"},
+    {d:"2023.08–2025.07", seg:"Ihateflyingbugs(주) · B2B 사업 담당(팀장)", t:"B2B 신규 프로그램<br>운영", sub:"고객관리 기준·운영 리포트·자동화 로직 구축", add:"성과 기반 고객관리"},
+    {d:"2025.08–2026.05", seg:"Ihateflyingbugs(주) · 중남미사업개발운영본부", t:"B2G 플랫폼<br>도입·확장 운영", sub:"다수 현장 이용 상태 데이터 관리, 확장 운영 체계 구축", add:"데이터 체계 설계·확장 운영"},
+  ];
+  const ty=2.45;
+  s.appendChild(el("div",null,{position:"absolute",left:px(MX),top:px(ty*IN),width:px(CW),height:"1px",background:"var(--line)"}));
+  const colW = CW/IN/4;
+  stages.forEach((st,i)=>{
+    const cx = MX/IN + i*colW;
+    const dot = el("div",null,{position:"absolute",left:px((cx*IN)-4.5),top:px(ty*IN-4.5),width:"9px",height:"9px",borderRadius:"50%",background:"var(--accent)"});
+    s.appendChild(dot);
+    textBlock(s, st.seg, cx, ty+0.14, colW-0.3, 0.44, {fs:13.3, bold:true, color:"var(--blue-muted)", lh:1.3});
+    textBlock(s, st.d, cx, ty+0.62, colW-0.3, 0.24, {fs:13.3, color:"var(--gray-light)"});
+    textBlock(s, st.t, cx, ty+0.9, colW-0.35, 0.62, {fs:17.3, bold:true, lh:1.25});
+    textBlock(s, st.sub, cx, ty+1.58, colW-0.35, 0.78, {fs:16, color:"var(--gray-body)", lh:1.4});
+    s.appendChild(el("div",null,{position:"absolute",left:px(cx*IN),top:px((ty+2.46)*IN),width:px((colW-0.35)*IN),height:"1px",background:"var(--line)"}));
+    textBlock(s, "+ "+st.add, cx, ty+2.58, colW-0.35, 0.4, {fs:13.3, bold:true, lh:1.3});
+  });
+
+  s.appendChild(el("div",null,{position:"absolute",left:px(MX),top:px(5.72*IN),width:px(CW),height:"1px",background:"var(--line)"}));
+  textBlock(s,"고객 반응·구매 데이터를 분석하는 역량에서 출발해, 고객 성과를 관리하는 역량으로, 다시 다수 현장과 이해관계자를 조율하며 사업을 확장하는 역량으로 범위를 넓혀왔습니다.", MX/IN, 5.88, CW/IN, 0.5, {fs:16, color:"var(--gray-body)"});
+  bottomProgress(s,4);
+}
+
+/* ---- 5. Experience Map ---- */
+{
+  const s = newSlide();
+  contentHeader(s,0,5,PROFILE_SUB,2);
+  pageTitle(s,"03","실제 수행한 업무 범위",1.3);
+
+  const headers = ["역량 영역","B2C","B2B","B2G"];
+  const rows = [
+    ["서비스 구조 설계","상품 소구점 기획서 작성","B2B 신규 프로그램 운영모델 설계","현장 조사 입력 양식 및 프로세스 설계"],
+    ["고객·사용자 데이터 분석","Cs 내역 및 유저 게시판 데이터 기반 리포트","고객 세그먼트별 운영 기준 수립","사용자 기준정보 DB 구축"],
+    ["운영 프로세스 설계","상품 및 프로모션 전 과정 운영 매뉴얼","이용 활성화 프로세스·고객관리 기준 설계","복합키 기반 동일인 판별 기준"],
+    ["KPI 및 성과관리","판매 추이 기반 방향 조정 리포트","재이용률·유지율 개선 리포트","계정 생성·접속·활성 이용 진단표"],
+    ["운영 자동화","—","Coda(노코드 업무 자동화·데이터 관리 툴) 기반 운영 리포트 자동화","운영 그룹별 진단 매트릭스"],
+    ["이해관계자·유관부서 조율","—","- 장기계약 논의 자료 작성<br>- 제품·운영 조직과 실행 우선순위 조율","- 책임·담당·협의·공유 기준 협업프로세스 매뉴얼 제작<br>- 계약·운영 조건 검토 시 법무·재무 조직과 협업"],
+    ["이슈 관리 체계","—","문제 유형 분류 및 후속 조치 관리","운영 그룹별 지연 진단, 후속 조치 목록, 일별 운영 리포트 운영"],
+    ["도입·확장 운영","—","성과관리 리포트·운영 리포트 양식 운영","후속 조치 목록 및 일별 운영 리포트 운영"],
+  ].map(r=>r.map((c,i)=> i===0? c : {html:c}));
+  buildTable(s, headers, rows, MX/IN, 2.05, CW/IN, [2.3,2.45,3.5,3.38], {boldFirst:true});
+  textBlock(s,"경험이 없거나 해당 사항이 적은 영역은 '—'로 표시했습니다.", MX/IN, 6.85, 8, 0.25, {fs:13.3, color:"var(--gray-light)"});
+  bottomProgress(s,5);
+}
+
+/* ---- 6. KPI ---- */
+{
+  const s = newSlide();
+  contentHeader(s,0,6,PROFILE_SUB,3);
+  pageTitle(s,"04","프로젝트 핵심 성과 (KPI)",1.3);
+
+  const headers=["지표","수치","상세 내용"];
+  const rows=[
+    ["재이용률 개선","×4","(B2B) 소구점 개선과 운영 프로세스 개선으로 재이용률 약 4배 개선"],
+    ["운영 고객 규모 확대","×6","(B2B) 이용 단계별 후속 조치 프로세스를 표준화해 운영 고객 규모 약 6배 확대"],
+    ["장기 파트너십 전환 기여","1 → 5년","(B2B) 재이용률·운영 규모 개선 지표를 근거로 1년 계약에서 5년 장기계약 전환 논의에 기여"],
+    ["확장 운영 지원","5 → 400","(B2G) 현장 파일럿 성과 검증 이후 400개 규모까지 확장 가능한 표준 운영 체계 구축 지원"],
+    ["데이터 기반 운영 관리","약 20만 명","(B2G) 사용자·계정 데이터를 가공해 핵심 진단 지표를 설계하고, 대시보드 기반 모니터링 체계 구축"],
+  ].map(r=>[r[0], {html:r[1], style:{fontWeight:700,color:"var(--accent)",fontSize:"17.3px",textAlign:"center"}}, {html:r[2],style:{textAlign:"left"}}]);
+  buildTable(s, headers, rows, MX/IN, 2.35, CW/IN, [2.7,1.7,7.23], {boldFirst:true});
+
+  calloutBox(s,"Point","반복 가능한 운영 구조를 통해 프로젝트의 본질과 성과를 달성할 수 있도록 체계를 구축했습니다.", MX/IN, 6.15, CW/IN, 0.85, 18.6);
+  bottomProgress(s,6);
+}
+
+/* ---- 7. How I Work ---- */
+{
+  const s = newSlide();
+  contentHeader(s,0,7,PROFILE_SUB,4);
+  pageTitle(s,"05","문제 해결 방식",1.3);
+  pageDesc(s,"목적과 KPI를 먼저 정의해 문제를 확인하고, 효과가 확인된 방식을 표준화하여 시스템이 돌아갈 수 있는 구조를 만들어온 방식입니다.",1.82);
+
+  const steps=[["01","목적·성공 기준 정의"],["02","데이터로 문제 확인"],["03","우선순위 결정"],["04","운영 구조 설계"],["05","KPI로 결과 확인"],["06","기준·매뉴얼로 표준화"]];
+  const sy=2.5, sw6 = CW/IN/6;
+  s.appendChild(el("div",null,{position:"absolute",left:px(MX),top:px(sy*IN),width:px(CW),height:"1px",background:"var(--line)"}));
+  steps.forEach((st,i)=>{
+    const cx = MX/IN + i*sw6;
+    const dot = el("div",null,{position:"absolute",left:px(cx*IN-4.5),top:px(sy*IN-4.5),width:"9px",height:"9px",borderRadius:"50%",background:"var(--accent)"});
+    s.appendChild(dot);
+    textBlock(s, st[0], cx, sy+0.16, sw6-0.2, 0.35, {fs:20,bold:true});
+    textBlock(s, st[1], cx, sy+0.53, sw6-0.25, 0.7, {fs:13.3, bold:true, color:"var(--gray-body)", lh:1.35});
+  });
+
+  textBlock(s,"6단계와 두 프로젝트의 1:1 대응", MX/IN, 4.1, 6, 0.3, {fs:14.7, bold:true});
+  const headers=["단계","Project 01 · B2B 신사업 운영","Project 02 · B2G 플랫폼 확장"];
+  const rows=[
+    ["01 목적·기준 정의","서비스 완료율·재이용률·운영 고객 규모를 성공 지표로 설정","계정 생성·접속·활성 이용률을 도입 성공 기준으로 설정"],
+    ["02 데이터로 확인","설문·이용 로그·서비스 완료율·재이용률 비교로 유지 저하 구간 확인","분산된 등록·계정·접속 데이터 연결해 현장별 병목 확인"],
+    ["03 우선순위 결정","콘텐츠 추가보다 고객관리 프로세스 개선을 우선순위로 설정","전체 현장 동시 대응보다 지연 운영 그룹·미접속 그룹을 우선 조치"],
+    ["04 운영 구조 설계","고객관리 기준·운영 리포트·자동화 로직 설계","진단 대시보드·후속 조치 목록·현장 입력 양식 설계"],
+    ["05 KPI로 결과 확인","재이용률·운영 고객 규모·계약 전환 근거 확인","정상·주의·지연 상태와 일별 조치 현황 확인"],
+    ["06 기준·매뉴얼 표준화","고객관리 기준과 성과 리포트 운영으로 표준화","운영 리포트와 이슈 분류 기준으로 확장 운영 표준화"],
+  ].map(r=>r.map((c,i)=> i===0? c : {html:c,style:{textAlign:"left"}}));
+  buildTable(s, headers, rows, MX/IN, 4.45, CW/IN, [2.0,4.85,4.78], {boldFirst:true});
+  bottomProgress(s,7);
+}
+
+/* ---- 8. Project 01 Overview ---- */
+projectOverview(8,1,P1_SUB,"1","PROJECT 01","B2B","신사업 기획 및 운영",
+  "대형 제휴사 고객을 대상으로 한 B2B 신규 프로그램(메가PT)의 성과 개선을 담당했습니다.<br>운영 기준이 없던 초기 단계에서 운영 인력 세팅, 고객관리 기준, 이용 활성화 프로세스, 성과관리 체계를 구축해 반복 운영 가능한 구조로 전환했습니다.",
+  "운영 인력 선발·세팅부터 고객관리 기준, 이용 활성화 프로세스, 후속 조치 체계, 성과 리포트 구축까지 초기 운영체계 전반을 설계·운영했습니다.<br>성과 데이터를 기반으로 재이용률 개선과 장기계약 전환 논의에 필요한 운영 근거를 정리했습니다.",
+  "2023.12 – 2025.07","팀장 · 사업 전반 운영",
+  ["재이용률 ×4","운영 고객 규모 ×6","계약 1년 → 5년 전환 기여"]
+);
+
+/* ---- 9. Project 01 Situation & Task ---- */
+{
+  const s = newSlide();
+  contentHeader(s,1,9,P1_SUB,1);
+  pageTitle(s,"02","상황과 과제",1.3);
+  pageDesc(s,"신규 B2B 프로그램(메가PT)은 고객관리 기준과 고객 체감 가치가 충분히 구조화되지 않은 상태였습니다.",1.82);
+
+  const halfW = (CW/IN - 0.5)/2;
+  textBlock(s,"상황", MX/IN, 2.5, halfW, 0.3, {fs:16, bold:true});
+  s.appendChild(el("div",null,{position:"absolute",left:px(MX),top:px(2.87*IN),width:px(halfW*IN),height:"1px",background:"var(--line)"}));
+  bulletList(s,[
+    "프리미엄 가격에 상응하는 고객 체감 가치가 명확히 구조화되어 있지 않았습니다.",
+    "고객 이용 상태를 확인하고 후속 조치를 실행하는 기준이 부족했습니다.",
+    "담당자별 대응 방식에 따라 고객 경험 편차가 발생할 수 있었습니다.",
+    "문제가 반복되어도 원인을 데이터로 추적할 방법이 없었습니다.",
+  ], MX/IN, 3.0, halfW, 15.3);
+
+  const rx = MX/IN + halfW + 0.5;
+  textBlock(s,"과제", rx, 2.5, halfW, 0.3, {fs:16, bold:true});
+  s.appendChild(el("div",null,{position:"absolute",left:px(rx*IN),top:px(2.87*IN),width:px(halfW*IN),height:"1px",background:"var(--line)"}));
+  bulletList(s,[
+    "고객 세그먼트별 기대 가치 정의",
+    "이용 활성화 기준 수립",
+    "고객 상태별 후속 조치 목록 설계",
+    "운영 리포트 구축",
+    "성과 지표 기반 장기계약 논의 근거 마련",
+  ], rx, 3.0, halfW, 15.3);
+
+  calloutBox(s,"핵심 과제","고객 이탈의 원인을 콘텐츠 부족으로 단정하지 않고, 이용 빈도·상담 이력·재이용 여부를 함께 확인한 결과, 문제는 콘텐츠 수보다 고객 상태에 따른 관리 기준 부재에 가깝다고 판단했습니다. 그래서 콘텐츠 추가보다 고객군별 후속 조치 기준과 담당자 운영 리포트를 먼저 설계했습니다.", MX/IN, 5.35, CW/IN, 1.35, 15.3);
+  bottomProgress(s,9);
+}
+
+/* ---- 10. Project 01 Data Logic ---- */
+{
+  const s = newSlide();
+  contentHeader(s,1,10,P1_SUB,2);
+  pageTitle(s,"03","데이터 로직과 구조화",1.3);
+
+  const labelW=1.7, contentX=MX/IN+labelW, contentW=CW/IN-labelW;
+  dataRow(s,"목적",2.5,labelW);
+  textBlock(s,"재수강률과 유지율을 개선하기 위해, 고객 생애주기에서 이탈이 집중되는 시점과 장기 이용으로 이어지는 요인을 데이터로 구분하기 위함", contentX,2.46,contentW,0.45,{fs:16});
+  dataRow(s,"활용 데이터",3.05,labelW);
+  textBlock(s,"등록일, 수강 기간(생애주기), 이탈·재수강 시점, 학년·취약 과목, 담당 선생님 배정 정보, 상담 이력", contentX,3.01,contentW,0.4,{fs:16});
+  dataRow(s,"가공방식",3.55,labelW);
+  textBlock(s,"고객 데이터 → 발견한 문제 → 판단 → 운영 액션", contentX,3.51,contentW,0.3,{fs:16});
+
+  const fw1=[2.75,2.75,3.05,3.08];
+  buildTable(s, ["고객 데이터","발견한 문제","판단","운영 액션"], [
+    ["수강 기간별 이탈 시점 분포 확인<br>(3개월 시점 집중 이탈 vs 장기 이용 분화)","단기 이탈군과 장기 이용군의 지속 요인이 서로 다름","이탈 요인은 제거하고 장기 이용 요인은 강화해야 한다고 판단","이용 기간 기준으로 고객군을 분리해 대응 전략 이원화"],
+    ["장기 이용군의 학년·취약 과목·담당 선생님 매칭 데이터 분석","담당 선생님의 상담 방식이 유지 핵심 요인이나 개인 역량에 의존","우수 선생님의 상담 노하우를 표준 프로세스로 전환할 필요로 판단","주간상담일지 프로세스 설계, B2B 프로그램 소구점으로 편입"],
+    ["이탈 고객의 상담 이력 확인","정기 상담 니즈가 있었으나 충족되지 않아 이탈","정기 상담 부재가 이탈의 핵심 원인이라고 판단","주간상담일지를 전 고객 대상 표준 프로세스로 확대 적용"],
+  ].map(r=>r.map(c=>({html:c,style:{textAlign:"left"}}))), MX/IN, 3.95, CW/IN, fw1);
+
+  dataRow(s,"액션 플랜",6.35,labelW);
+  textBlock(s,"장기 이용의 핵심 요인이었던 담당 선생님의 상담 노하우를 표준화해 주간상담일지 프로세스를 만들고, B2B 프로그램만의 소구점으로 자리잡게 했습니다. 다만 주간상담은 선생님 입장에서 운영 부담이 컸던 만큼, 데이터 자동 추출·상담 멘트 자동화·학생 분석 대시보드 개선을 통해 더 쉽고 전문적으로 상담을 운영할 수 있는 체계로 발전시켰습니다.", contentX,6.3,contentW,0.95,{fs:14, lh:1.45});
+
+  bottomProgress(s,10);
+}
+
+/* ---- 11. Project 01 Result ---- */
+{
+  const s = newSlide();
+  contentHeader(s,1,11,P1_SUB,3);
+  pageTitle(s,"04","성과와 본인 역할",1.3);
+  pageDesc(s,"신규 프로그램 운영모델을 구축해 재이용률과 운영 고객 규모를 개선하고, 장기계약 논의의 근거를 만들었습니다.",1.82);
+
+  const stats=[["×6","재이용률 개선","고객 상태별 관리 기준을 통일해 이탈 구간을 줄임"],["×4","운영 고객 규모 확대","고객 이용 단계별 후속 조치를 적용해 관리 가능 규모 확대"],["1 → 5년","장기계약 전환 논의 기여","개선된 성과 지표를 장기계약 논의 자료로 정리"]];
+  const sw3 = CW/IN/3;
+  stats.forEach((st,i)=>{
+    const cx = MX/IN + i*sw3;
+    if(i>0) s.appendChild(el("div",null,{position:"absolute",left:px(cx*IN),top:px(2.5*IN),width:"1px",height:px(1.5*IN),background:"var(--line)"}));
+    const px_ = cx + (i===0?0:0.35);
+    textBlock(s, st[0], px_, 2.5, sw3-0.35, 0.75, {fs:45.3, bold:true, color:"var(--accent)"});
+    textBlock(s, st[1], px_, 3.28, sw3-0.5, 0.35, {fs:16, bold:true});
+    textBlock(s, st[2], px_, 3.62, sw3-0.5, 0.35, {fs:13.3, color:"var(--gray-light)"});
+  });
+
+  const box = el("div",null,{position:"absolute",left:px(MX),top:px(4.55*IN),width:px(CW),height:px(1.6*IN),background:"var(--card-bg)",borderRadius:"6px"});
+  const lbl = el("div",null,{position:"absolute",left:"36px",top:"18px",fontSize:"14px",fontWeight:700,color:"var(--navy)"}); lbl.textContent="본인 역할";
+  const tx = el("div",null,{position:"absolute",left:"36px",top:"58px",width:px(CW-72),fontSize:"18.6px",fontWeight:700,color:"var(--navy)",lineHeight:1.5});
+  tx.textContent = "고객 설문 설계, 이용·유지 데이터 분석, 고객관리 기준과 운영 리포트 설계, 자동화 로직 구축, 팀 운영, 성과 데이터 정리와 재계약 논의 자료화를 직접 담당했습니다.";
+  box.appendChild(lbl); box.appendChild(tx); s.appendChild(box);
+  bottomProgress(s,11);
+}
+
+/* ---- 12. Project 02 Overview ---- */
+projectOverview(12,2,P2_SUB,"2","PROJECT 02","B2G","플랫폼 도입·확장 운영",
+  "정부·공공기관 대상 플랫폼 도입 사업으로, 엘살바도르 현지 학교에 자사 플랫폼을 도입했습니다.<br>교사·학생이 실제로 사용할 수 있는 상태까지 운영·데이터 관리 체계를 구축하는 것이 목적이었습니다.",
+  "여러 출처에 흩어진 사용자·계정·접속 데이터를 직접 정제·연결하고, 상시 운영 가능한 진단 대시보드를 구축했습니다.",
+  "2025.08 – 2026.05","데이터 체계 설계 및 운영 담당",
+  ["5개 현장 → 400개 현장","약 20만 명 데이터 관리","다자 이해관계자 조율"]
+);
+
+/* ---- 13. Project 02 Situation & Task ---- */
+{
+  const s = newSlide();
+  contentHeader(s,2,13,P2_SUB,1);
+  pageTitle(s,"02","상황과 과제",1.3);
+  pageDesc(s,"현장 수가 5개에서 400개로 늘어나는 과정에서, 운영 데이터와 대응 기준을 새로 세워야 하는 상황이었습니다.",1.82);
+
+  const halfW=(CW/IN-0.5)/2;
+  textBlock(s,"문제", MX/IN, 2.5, halfW, 0.3, {fs:16, bold:true});
+  s.appendChild(el("div",null,{position:"absolute",left:px(MX),top:px(2.87*IN),width:px(halfW*IN),height:"1px",background:"var(--line)"}));
+  bulletList(s,[
+    "현장마다 운영 데이터가 따로 관리돼 전체 현황을 한눈에 파악하기 어려웠습니다.",
+    "현장 수가 5개에서 400개로 늘어나며 기존 방식으로는 개별 대응이 불가능해졌습니다.",
+    "실제로 이용 중인 현장과 도입만 되고 방치된 현장이 구분되지 않았습니다.",
+    "본사·현지 파트너·현장 담당자 간 정보 공유 기준이 없어 대응이 늦어졌습니다.",
+  ], MX/IN, 3.0, halfW, 15.3);
+
+  const rx = MX/IN + halfW + 0.5;
+  textBlock(s,"과제", rx, 2.5, halfW, 0.3, {fs:16, bold:true});
+  s.appendChild(el("div",null,{position:"absolute",left:px(rx*IN),top:px(2.87*IN),width:px(halfW*IN),height:"1px",background:"var(--line)"}));
+  bulletList(s,[
+    "현장별 운영 데이터 및 조사&입력 프로세스를 하나의 기준정보로 통합",
+    "현장 활성 상태 진단 기준 수립",
+    "방치 현장 식별 및 후속 조치 체계 설계",
+    "운영 진단 대시보드 구축",
+    "본사·파트너·현장 간 조율 체계 마련",
+  ], rx, 3.0, halfW, 15.3);
+
+  calloutBox(s,"핵심 과제","도입 여부만으로는 운영 성공을 판단할 수 없다고 보고, 계정 생성·최초 접속·활성 이용·전일 대비 변화까지 분리해 현장 상태를 진단했습니다. 그 결과 전체 현장을 동일하게 관리하는 방식보다, 미접속·지연·데이터 불일치 현장을 먼저 분리해 후속 조치하는 방식이 확장 운영에 적합하다고 판단했습니다.", MX/IN, 5.35, CW/IN, 1.35, 15.3);
+  bottomProgress(s,13);
+}
+
+/* ---- 14. Project 02 Data-driven Action Plan ---- */
+{
+  const s = newSlide();
+  contentHeader(s,2,14,P2_SUB,2);
+  pageTitle(s,"03","데이터 기반 액션플랜",1.3);
+
+  const labelW=1.7, contentX=MX/IN+labelW, contentW=CW/IN-labelW;
+  dataRow(s,"목적",2.5,labelW);
+  textBlock(s,"약 20만 명 규모의 사용자·계정 데이터를 정제해 현장별 실제 이용 상태를 모니터링하고,<br>도입부터 성과(성적 향상)까지 전체 생애주기를 단계별로 실시간 추적할 수 있는 운영 체계를 만들기 위함", contentX,2.46,contentW,0.65,{fs:16, lh:1.4});
+  dataRow(s,"활용 데이터",3.35,labelW);
+  textBlock(s,"현장별 등록 정보, 계정 생성·접속 로그, 출석·진도 데이터, 현장 입력 양식(현지 파트너·학교 작성)", contentX,3.31,contentW,0.4,{fs:16});
+  dataRow(s,"가공방식",3.85,labelW);
+  textBlock(s,"현장 데이터 → 발견한 문제 → 판단 → 운영 액션", contentX,3.81,contentW,0.3,{fs:16});
+
+  const fw3=[2.7,2.85,3.0,3.08];
+  buildTable(s, ["현장 데이터","발견한 문제","판단","운영 액션"], [
+    ["현장별 데이터 출처·입력 양식 확인","데이터가 여러 곳에 흩어져 있고 현장마다 조사·입력 양식이 제각각이라 가공이 어려움","표준 입력 양식과 기준정보 체계부터 만들어야 한다고 판단","현장 입력 양식을 통일하고 학교별 교육·도입·이용 현황을 하나의 기준정보로 통합"],
+    ["학교별 교육·도입·이용 현황 데이터 확인","단계별 진행 상태를 판단할 기준이 없어 학교별 현황을 한눈에 파악하기 어려움","도입부터 성과까지 생애주기를 단계별로 나눠 관리해야 한다고 판단","사전준비·도입·운영·지속 4단계 운영 프로세스를 설계해 일정·방식·담당자까지 정부에 제안"],
+    ["운영·지속 단계의 접속·출석·진도 데이터 확인","이용 여부가 실제 성과(성적 향상)로 이어지는지 판단할 지표·추적 체계가 없음","접속·출석·진도를 성과 선행지표로 보고 추적해야 한다고 판단","구글시트와 CODA 등의 툴을 이용하여 이용률 지표(접속·출석 기반)와 추적 대시보드 구축, 성적향상 지표 추적 체계로 확장"],
+  ].map(r=>r.map(c=>({html:c,style:{textAlign:"left"}}))), MX/IN, 4.25, CW/IN, fw3);
+
+  dataRow(s,"액션 플랜",6.55,labelW);
+  textBlock(s,"사전준비·도입·운영·지속 4단계로 운영 생애주기를 정의하고, 각 단계의 목표·담당자·추진 일정을 담은 운영 프로세스를 설계해 정부에 제안했습니다. 운영 단계에서는 접속·출석 데이터를 기반으로 이용률 지표와 추적 대시보드를 만들었고, 지속 단계에서는 프로젝트의 본질적 목표인 성적 향상을 접속·출석·진도 데이터로 추적하는 지표 체계로 연결했습니다.", contentX,6.5,contentW,0.9,{fs:13.3, lh:1.4});
+
+  bottomProgress(s,14);
+}
+
+/* ---- 15. Project 02 지표 진단 & 조치 체계 ---- */
+{
+  const s = newSlide();
+  contentHeader(s,2,15,P2_SUB,3);
+  pageTitle(s,"04","지표 진단 & 조치 체계",1.3);
+  pageDesc(s,"분산된 현장 입력 데이터와 플랫폼 이용 데이터를 운영 생애주기별 지표로 재구성해, 학교별 도입 상태·이용 현황·성과 개선 대상을 판단하고 후속 조치 체계로 연결했습니다.",1.82,0.55);
+
+  textBlock(s,"진단 기준", MX/IN, 2.55, 3, 0.3, {fs:16, bold:true});
+  const crit=["계정 생성 여부","실제 접속 여부","출석 여부","진도율","유효진도 달성률","운영 그룹별 지연 여부","데이터 불일치 여부"];
+  chipsRow(s, crit, MX/IN, 2.9);
+
+  textBlock(s,"운영 방식", MX/IN, 3.75, 3, 0.3, {fs:16, bold:true});
+  textBlock(s,"운영 생애주기를 사전 준비·도입·운영·지속 단계로 구분하고, 각 단계별 목표·일정·담당자·확인 지표를 정의해 정부 제안용 운영 프로세스로 정리했습니다. 도입 단계에서는 계정 생성과 접속 여부를 기준으로 미도입·미접속 대상을 식별했고, 운영 단계에서는 접속·출석 데이터를 기반으로 이용률을 추적했습니다. 지속 단계에서는 성적 향상이라는 프로젝트 목표에 맞춰 진도율과 유효진도 달성 여부를 성과 판단 지표로 정의했습니다.",
+    MX/IN, 4.08, CW/IN, 1.05, {fs:15.3, color:"var(--gray-body)", lh:1.5});
+
+  const headers=["운영단계","확인 데이터","판단기준","액션플랜"];
+  const rows=[
+    ["사전준비","학교별 교육 일정, 인프라 준비 현황, 담당자 정보","교육·인프라·계획이 준비되어야 도입 가능하다고 판단","학교별 준비 일정, 교육 방식, 담당자 역할을 정리해 정부 제안용 운영 프로세스 수립"],
+    ["도입","계정 생성 여부, 최초 접속 여부, 미접속자 현황","계정 생성만으로는 도입 완료로 볼 수 없고, 실제 접속 여부까지 확인해야 한다고 판단","미접속자 목록을 생성하고 학교·현지 파트너별 후속 조치 대상 지정"],
+    ["운영","접속 여부, 출석 여부, 학교별 이용률","실제 이용률은 접속과 출석 데이터를 함께 봐야 한다고 판단","접속·출석 기반 이용률 대시보드 구축 및 학교별 운영 상태 모니터링"],
+    ["지속","진도율, 유효진도 달성 여부, 성과 변화","성적 향상을 보려면 단순 접속이 아니라 실제 학습 진도 달성 여부를 봐야 한다고 판단","유효진도 기준을 정의하고 성과 개선 대상 학교·학생군을 추적"],
+  ].map(r=>r.map((c,i)=> i===0? {html:c,style:{textAlign:"center",fontWeight:700}} : {html:c,style:{textAlign:"left"}}));
+  buildTable(s, headers, rows, MX/IN, 5.2, CW/IN, [1.3,3.05,3.62,3.62], {headFs:13, bodyFs:11.3, padY:5, lh:1.32});
+
+  bottomProgress(s,15);
+}
+
+/* ---- 16. Project 02 협업 구조와 확장 ---- */
+{
+  const s = newSlide();
+  contentHeader(s,2,16,P2_SUB,4);
+  pageTitle(s,"05","협업 구조와 확장",1.3);
+  pageDesc(s,"점검 기준과 데이터 체계를 통해 5개 현장을 400개 현장으로 확장했습니다.",1.82);
+
+  const headers=["활동","엘살바도르 정부 담당 부처","본사","현지 파트너","학교 현장 담당자","운영 PM"];
+  const rows=[
+    ["점검기준 수립","협의","책임","협의","공유","담당"],
+    ["현장 데이터 수집","공유","공유","담당","담당","책임"],
+    ["운영 리포트 작성","공유","협의","공유","공유","담당"],
+    ["계약·확장 협상","책임","담당","협의","공유","협의"],
+  ].map(r=>r.map((c,i)=> i===0? c : {html:c,style:{textAlign:"center"}}));
+  buildTable(s, headers, rows, MX/IN, 2.3, CW/IN, [2.05,2.15,1.75,1.75,1.85,1.78], {boldFirst:true, headFs:16.5, bodyFs:16});
+  textBlock(s,"책임 = 최종 승인 · 담당 = 실무 수행 · 협의 = 의견 조율 · 공유 = 진행 상황 전달", MX/IN, 4.15, CW/IN, 0.3, {fs:13.3, color:"var(--gray-light)"});
+
+  const halfW=(CW/IN-0.5)/2;
+  textBlock(s,"5개 현장  →  400개 현장", MX/IN, 4.85, halfW, 0.55, {fs:32, bold:true, color:"var(--accent)"});
+  textBlock(s,"약 20만 명 규모 사용자·계정 데이터 정제·연결", MX/IN, 5.45, halfW, 0.4, {fs:16, color:"var(--gray-body)"});
+
+  const rx = MX/IN + halfW + 0.5;
+  s.appendChild(el("div",null,{position:"absolute",left:px(rx*IN),top:px(4.85*IN),width:"1px",height:px(1.0*IN),background:"var(--line)"}));
+  textBlock(s,"정부·본사·현지 파트너·학교 현장의 역할을 구분해 데이터 수집, 이슈 조치, 운영 리포트 흐름을 표준화했습니다.", rx+0.3, 4.85, halfW-0.3, 1.1, {fs:16, color:"var(--gray-body)"});
+  bottomProgress(s,16);
+}
+
+/* ---- 17. Core Operating Assets ---- */
+{
+  const s = newSlide();
+  crumb(s,3,17);
+  s.appendChild(el("div","divider",{top:px(0.85*IN)}));
+  pageTitle(s,"01","Core Operating Assets",1.15);
+  pageDesc(s,"두 프로젝트에서 반복적으로 만든 사업운영 산출물입니다.",1.67);
+
+  const assets=[
+    {t:"고객 설문 및 이용 데이터 분석", tag:"B2B"},{t:"고객 세그먼트 기준", tag:"B2B"},
+    {t:"운영 리포트", tag:"공통"},{t:"자동화 로직", tag:"공통"},
+    {t:"진단 대시보드", tag:"B2G"},{t:"후속 조치 목록", tag:"B2G"},
+    {t:"이해관계자 협업표", tag:"공통"},{t:"성과관리 리포트", tag:"B2B"},
+  ];
+  const gCols=4, gGap=0.3, gw=(CW/IN-gGap*(gCols-1))/gCols, gh=1.15;
+  assets.forEach((a,i)=>{
+    const col=i%gCols, row=Math.floor(i/gCols);
+    const cx=MX/IN+col*(gw+gGap), cy=2.4+row*(gh+0.3);
+    const card=el("div",null,{position:"absolute",left:px(cx*IN),top:px(cy*IN),width:px(gw*IN),height:px(gh*IN),background:"var(--card-bg)",borderRadius:"5px"});
+    const tag=el("div",null,{position:"absolute",left:"21px",top:"13px",fontSize:"13.3px",fontWeight:700,color:"var(--blue-muted)"}); tag.textContent=a.tag;
+    const tt=el("div",null,{position:"absolute",left:"21px",top:"40px",width:px(gw*IN-42),fontSize:"16px",fontWeight:700,color:"var(--navy)"}); tt.textContent=a.t;
+    card.appendChild(tag); card.appendChild(tt); s.appendChild(card);
+  });
+
+  calloutBox(s,"연결점","이 산출물들은 이후에도 담당자가 반복해서 사용할 수 있는 사업운영 자산으로 남았습니다.", MX/IN, 5.35, CW/IN, 0.95, 17.3);
+  bottomProgress(s,17);
+}
+
+/* ---- 18. Closing ---- */
+{
+  const s = newSlide();
+  band(s);
+  crumb(s,4,18);
+  s.appendChild(el("div","divider",{top:px(0.85*IN)}));
+
+  textBlock(s,"김기현", MX/IN, 1.5, 6, 0.7, {fs:40, bold:true});
+  textBlock(s,"Business Operations PM", MX/IN, 2.15, 6, 0.4, {fs:18.6, bold:true, color:"var(--blue-muted)"});
+
+  s.appendChild(el("div",null,{position:"absolute",left:px(MX),top:px(2.75*IN),width:px(5.6*IN),height:"1px",background:"var(--line)"}));
+  textBlock(s,"저는 사업이 본질을 달성하고 성과를 내기 위해 필요한 운영 기준, 데이터 구조, 실행 프로세스를 직접 만드는 사업운영 PM입니다.",
+    MX/IN, 2.95, 10.8, 0.75, {fs:21.3, bold:true, lh:1.4});
+  textBlock(s,"B2B 신규 프로그램에서는 고객이 더 높은 가격을 지불할 이유를 운영 구조로 만들었고, B2G 플랫폼 도입 사업에서는 분산된 데이터를 기준정보와 후속 조치 목록으로 전환해 400개 현장의 운영 병목을 관리했습니다. 문제를 발견하는 데서 멈추지 않고, 조직이 반복해서 사용할 수 있는 기준·리포트·대시보드·자동화 로직으로 남기는 것이 제 강점입니다.",
+    MX/IN, 3.75, 10.8, 1.1, {fs:16, color:"var(--gray-body)", lh:1.55});
+  textBlock(s,"사업운영 PM으로서 신규 서비스 운영, 고객 유지율 개선, 운영 데이터 체계 구축, 다자 이해관계자 조율이 필요한 조직에서 실행 가능한 운영 구조를 만들 수 있습니다.",
+    MX/IN, 5.0, 10.8, 0.5, {fs:16, color:"var(--navy)", lh:1.5});
+  textBlock(s,"감사합니다.", MX/IN, 5.65, 10.8, 0.4, {fs:16, color:"var(--navy)"});
+
+  s.appendChild(el("div","divider",{top:px(6.55*IN)}));
+  textBlock(s,"EMAIL", MX/IN, 6.7, 3, 0.28, {fs:13.3, color:"var(--gray-light)"});
+  textBlock(s,"kimkh1212@gmail.com", MX/IN, 6.97, 4, 0.35, {fs:17.3, bold:true});
+  textBlock(s,"PHONE", MX/IN+4.2, 6.7, 3, 0.28, {fs:13.3, color:"var(--gray-light)"});
+  textBlock(s,"010-3669-9464", MX/IN+4.2, 6.97, 3, 0.35, {fs:17.3, bold:true});
+  bottomProgress(s,18);
+}
+
+/* ---------------- responsive scaling + page indicator ---------------- */
+function rescale(){
+  document.querySelectorAll(".slide-wrap").forEach(w=>{
+    const scale = w.clientWidth / 1280;
+    w.querySelector(".slide").style.transform = `scale(${scale})`;
+  });
+}
+window.addEventListener("resize", rescale);
+window.addEventListener("load", rescale);
+rescale();
+
+const topbarPage = document.getElementById("topbar-page");
+const wraps = Array.from(document.querySelectorAll(".slide-wrap"));
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(en=>{
+    if(en.isIntersecting){
+      const idx = wraps.indexOf(en.target) + 1;
+      topbarPage.textContent = `${idx} / 18`;
+    }
+  });
+}, {threshold:0.5});
+wraps.forEach(w=>io.observe(w));
+</script>
+</body>
+</html>
