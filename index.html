@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>김기현 · 사업기획 포트폴리오 2026</title>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{
+  --navy:#1B2A4A;
+  --blue:#2C53A8;
+  --blue2:#3D6FD6;
+  --ice:#CADCFC;
+  --light:#F4F6FB;
+  --line:#E2E8F0;
+  --ink:#1B2A4A;
+  --muted:#5A6577;
+  --white:#FFFFFF;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:"Pretendard",-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+  background:#2a3142;
+  color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+  line-height:1.5;
+}
+
+/* ===== Slide frame: 16:9 ===== */
+.deck{
+  width:100%;
+  max-width:1280px;
+  margin:0 auto;
+  padding:32px 16px 80px;
+}
+.slide{
+  position:relative;
+  width:100%;
+  aspect-ratio:16/9;
+  background:var(--light);
+  border-radius:10px;
+  margin-bottom:28px;
+  overflow:hidden;
+  box-shadow:0 8px 30px rgba(0,0,0,.25);
+  /* internal padding scales with width via container query font */
+  container-type:inline-size;
+}
+.slide-inner{
+  position:absolute;
+  inset:0;
+  padding:5.2% 5.5%;
+  display:flex;
+  flex-direction:column;
+}
+/* scalable type — everything in cqw so it locks to slide width */
+.slide{font-size:1.05cqw;}
+
+/* ===== shared header ===== */
+.kicker{display:flex;align-items:baseline;gap:.55em;margin-bottom:.2em;}
+.kicker .num{color:var(--blue2);font-weight:800;font-size:1.55em;letter-spacing:.02em;}
+.kicker .ttl{color:var(--navy);font-weight:800;font-size:1.55em;}
+.subhead{color:var(--muted);font-size:.92em;margin:.5em 0 1.4em;font-weight:500;}
+
+.pageno{position:absolute;right:4%;bottom:3.4%;color:#9aa3b2;font-size:.78em;font-weight:600;}
+
+/* ===== Cover (p1) ===== */
+.cover{background:linear-gradient(135deg,#16223d 0%,#1B2A4A 55%,#22376a 100%);}
+.cover .slide-inner{justify-content:center;}
+.cover .eyebrow{color:var(--ice);font-size:1.05em;font-weight:700;letter-spacing:.28em;margin-bottom:1.1em;}
+.cover h1{color:#fff;font-size:2.5em;font-weight:800;line-height:1.32;letter-spacing:-.01em;}
+.cover .tagline{color:#cdd7ea;font-size:1.15em;font-weight:500;margin-top:.9em;}
+.cover .chips{display:flex;flex-wrap:wrap;gap:.6em;margin-top:1.8em;}
+.cover .chip{border:1px solid rgba(202,220,252,.45);color:#dbe5f7;font-size:.82em;font-weight:600;padding:.42em 1em;border-radius:999px;}
+.cover .who{margin-top:2.4em;display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:1em;}
+.cover .who .name{color:#fff;font-size:1.55em;font-weight:800;}
+.cover .who .role{color:#aebbd6;font-size:.92em;font-weight:500;margin-top:.3em;}
+.cover .who .contact{color:#cdd7ea;font-size:.9em;font-weight:500;text-align:right;line-height:1.8;}
+.cover .pageno{color:#7e8aa6;}
+
+/* ===== TOC (p2) ===== */
+.toc-band{background:var(--navy);color:#fff;border-radius:8px;padding:1.4em 1.8em;font-weight:700;font-size:1.02em;letter-spacing:-.01em;margin-bottom:1.6em;}
+.toc-list{display:flex;flex-direction:column;gap:.85em;}
+.toc-row{background:#fff;border-radius:8px;padding:1.15em 1.6em;display:flex;align-items:center;gap:1.4em;box-shadow:0 1px 4px rgba(27,42,74,.06);}
+.toc-row .n{color:var(--blue2);font-weight:800;font-size:1.05em;min-width:2em;}
+.toc-row .t{color:var(--navy);font-weight:800;font-size:1.05em;flex:1;}
+.toc-row .d{color:var(--muted);font-size:.85em;font-weight:500;}
+.toc-row .p{color:var(--blue2);font-weight:800;font-size:.95em;min-width:2.5em;text-align:right;}
+
+/* ===== Career summary (p3) ===== */
+.bighead{color:var(--navy);font-size:1.5em;font-weight:800;line-height:1.35;margin-bottom:.9em;letter-spacing:-.01em;}
+.dark-box{background:var(--navy);border-radius:8px;padding:1.4em 1.8em;margin-bottom:1.4em;}
+.dark-box ul{list-style:none;display:flex;flex-direction:column;gap:.72em;}
+.dark-box li{color:#dfe5f0;font-size:.92em;position:relative;padding-left:1.3em;line-height:1.5;}
+.dark-box li::before{content:"";position:absolute;left:.1em;top:.55em;width:.42em;height:.42em;border-radius:50%;background:var(--blue2);}
+.dark-box li b{color:#fff;font-weight:700;}
+.label{color:var(--navy);font-weight:800;font-size:.98em;margin-bottom:.7em;}
+.cap-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:.8em;}
+.cap-card{background:#fff;border:1px solid var(--line);border-radius:8px;padding:1.2em .6em;text-align:center;display:flex;flex-direction:column;align-items:center;gap:.7em;}
+.cap-ic{width:2.9em;height:2.9em;border-radius:50%;background:var(--ice);display:flex;align-items:center;justify-content:center;}
+.cap-ic svg{width:1.45em;height:1.45em;fill:var(--blue);}
+.cap-card .nm{color:var(--navy);font-weight:700;font-size:.82em;line-height:1.3;}
+.cap-card .pj{color:var(--blue2);font-weight:700;font-size:.78em;}
+.dir-band{background:#eaf0fb;border-radius:8px;padding:1.05em 1.5em;margin-top:1.3em;font-size:.88em;color:#46506a;line-height:1.5;}
+.dir-band b{color:var(--blue);font-weight:800;}
+.dir-band span{color:#46506a;}
+
+/* ===== capability table (p4) ===== */
+.cap-table{width:100%;border-collapse:collapse;font-size:.88em;margin-top:.4em;}
+.cap-table thead th{background:var(--navy);color:#fff;font-weight:700;padding:.85em 1.1em;text-align:left;font-size:.95em;}
+.cap-table thead th:first-child{border-radius:6px 0 0 6px;}
+.cap-table thead th:last-child{border-radius:0 6px 6px 0;}
+.cap-table tbody td{background:#fff;padding:.9em 1.1em;border-bottom:6px solid var(--light);color:#384155;line-height:1.45;}
+.cap-table tbody td:nth-child(2){font-weight:700;color:var(--navy);}
+.cap-table tbody td:nth-child(3){color:var(--blue);font-weight:700;}
+
+/* ===== timeline (p5) ===== */
+.tl-list{display:flex;flex-direction:column;gap:1em;}
+.tl-row{background:#fff;border-radius:8px;padding:1.15em 1.5em;display:flex;align-items:center;gap:1.5em;box-shadow:0 1px 4px rgba(27,42,74,.06);}
+.tl-badge{background:var(--navy);color:#fff;font-weight:800;font-size:.92em;padding:.85em 1.1em;border-radius:7px;min-width:4.6em;text-align:center;letter-spacing:.02em;}
+.tl-date{color:var(--blue2);font-weight:800;font-size:.88em;min-width:9.5em;}
+.tl-body{flex:1;}
+.tl-body .t{color:var(--navy);font-weight:800;font-size:.95em;}
+.tl-body .d{color:var(--muted);font-size:.85em;margin-top:.25em;}
+.tl-tag{background:#eaf0fb;color:var(--blue);font-weight:700;font-size:.82em;padding:.7em 1.1em;border-radius:7px;min-width:9em;text-align:center;}
+
+/* ===== section divider ===== */
+.divider{background:linear-gradient(135deg,#16223d 0%,#1B2A4A 60%,#22376a 100%);}
+.divider .slide-inner{justify-content:center;}
+.divider .pj{color:var(--ice);font-size:1em;font-weight:700;letter-spacing:.3em;margin-bottom:1em;}
+.divider h2{color:#fff;font-size:2.1em;font-weight:800;line-height:1.3;letter-spacing:-.01em;}
+.divider .pf{color:#cdd7ea;font-size:1.02em;font-weight:500;margin-top:1.1em;line-height:1.5;}
+.divider .pageno{color:#7e8aa6;}
+
+/* ===== project summary (p7) ===== */
+.overview{background:var(--navy);border-radius:8px;padding:1.4em 1.8em;margin-bottom:1.2em;}
+.overview .h{color:#fff;font-weight:800;font-size:.98em;margin-bottom:.5em;}
+.overview p{color:#dfe5f0;font-size:.88em;line-height:1.55;}
+.persp{background:#eaf0fb;border-radius:8px;padding:1em 1.5em;margin-bottom:1.2em;font-size:.86em;line-height:1.5;color:#46506a;}
+.persp b{color:var(--blue);font-weight:800;}
+.flow3{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:stretch;gap:.5em;margin-bottom:1.2em;}
+.flow-col{display:flex;flex-direction:column;}
+.flow-head{background:var(--navy);color:#fff;font-weight:800;font-size:.9em;padding:.7em;text-align:center;border-radius:7px 7px 0 0;}
+.flow-card{background:#fff;border:1px solid var(--line);border-top:none;border-radius:0 0 7px 7px;padding:1.1em .9em;text-align:center;flex:1;}
+.flow-card .ft{color:var(--navy);font-weight:800;font-size:.96em;line-height:1.35;margin-bottom:.6em;}
+.flow-card .fhr{height:1px;background:var(--line);margin:.4em 1.5em .6em;}
+.flow-card .fd{color:var(--muted);font-size:.78em;line-height:1.45;}
+.flow-arrow{display:flex;align-items:center;justify-content:center;color:var(--blue2);font-size:1.4em;font-weight:800;}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:.8em;}
+.metric{background:#fff;border:1px solid var(--line);border-radius:8px;padding:1.1em .6em;text-align:center;}
+.metric.dark{background:var(--navy);border-color:var(--navy);}
+.metric .mv{color:var(--blue2);font-weight:800;font-size:1.15em;line-height:1.2;}
+.metric.dark .mv{color:#fff;}
+.metric .md{color:var(--muted);font-size:.75em;margin-top:.4em;line-height:1.35;}
+.metric.dark .md{color:#aab6d0;}
+
+/* ===== contribution 2x2 (p8) ===== */
+.contrib-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.1em;flex:1;}
+.contrib-card{background:#fff;border-radius:9px;padding:1.4em 1.6em;box-shadow:0 2px 8px rgba(27,42,74,.06);}
+.contrib-card .ch{display:flex;align-items:center;gap:.7em;margin-bottom:.7em;}
+.contrib-card .ch .cic{width:2.3em;height:2.3em;border-radius:50%;background:var(--ice);display:flex;align-items:center;justify-content:center;}
+.contrib-card .ch .cic svg{width:1.2em;height:1.2em;fill:var(--blue);}
+.contrib-card .ch .ctitle{color:var(--blue);font-weight:800;font-size:1.05em;}
+.contrib-card .cmain{color:var(--navy);font-weight:800;font-size:.98em;margin-bottom:.4em;}
+.contrib-card .csub{color:var(--muted);font-size:.82em;margin-bottom:.9em;line-height:1.45;}
+.contrib-card .roles{display:flex;gap:.5em;flex-wrap:wrap;}
+.role-d{background:var(--navy);color:#fff;font-weight:700;font-size:.76em;padding:.5em .9em;border-radius:6px;}
+.role-l{background:#eaf0fb;color:var(--blue);font-weight:700;font-size:.76em;padding:.5em .9em;border-radius:6px;}
+
+/* ===== detail STAR (p9-12) ===== */
+.concl-wrap{margin-bottom:1.3em;}
+.concl-tab{background:var(--navy);color:#fff;font-weight:800;font-size:.88em;padding:.6em 2.2em;border-radius:7px 7px 0 0;display:inline-block;}
+.concl-box{background:#fff;border:1px solid var(--line);border-radius:0 8px 8px 8px;padding:1.5em 1.8em;display:flex;align-items:center;gap:1.4em;}
+.concl-ic{width:3.4em;height:3.4em;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.concl-ic svg{width:1.7em;height:1.7em;fill:#fff;}
+.concl-text{flex:1;}
+.concl-text .h{color:var(--blue);font-weight:800;font-size:1.18em;line-height:1.35;letter-spacing:-.01em;}
+.concl-text .d{color:#46506a;font-size:.85em;margin-top:.5em;line-height:1.5;}
+.concl-pill{background:var(--navy);color:#fff;font-weight:700;font-size:.78em;padding:.6em 1.1em;border-radius:999px;white-space:nowrap;flex-shrink:0;align-self:flex-start;}
+.evid-label{color:var(--muted);font-weight:700;font-size:.85em;margin-bottom:.7em;}
+.star3{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:stretch;gap:.4em;}
+.star-col{display:flex;flex-direction:column;}
+.star-head{background:var(--navy);color:#fff;font-weight:800;font-size:.86em;padding:.65em;text-align:center;border-radius:7px 7px 0 0;}
+.star-card{background:#fff;border:1px solid var(--line);border-top:none;border-radius:0 0 7px 7px;padding:1.1em 1em;flex:1;}
+.star-card .st{color:var(--navy);font-weight:800;font-size:.9em;text-align:center;line-height:1.35;margin-bottom:.6em;}
+.star-card .shr{height:1px;background:var(--line);margin:.3em 1.2em .6em;}
+.star-card .sd{color:var(--muted);font-size:.78em;line-height:1.5;text-align:center;}
+.star-arrow{display:flex;align-items:center;justify-content:center;color:var(--blue2);font-size:1.2em;font-weight:800;}
+
+/* ===== business meaning 2x2 (p13) ===== */
+.mean-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.1em;flex:1;}
+.mean-card{background:#fff;border-radius:9px;padding:1.5em 1.7em;box-shadow:0 2px 8px rgba(27,42,74,.06);display:flex;flex-direction:column;}
+.mean-card .mh{display:flex;align-items:center;gap:.7em;margin-bottom:.7em;}
+.mean-card .mh .mic{width:2.3em;height:2.3em;border-radius:50%;background:var(--ice);display:flex;align-items:center;justify-content:center;}
+.mean-card .mh .mic svg{width:1.2em;height:1.2em;fill:var(--blue);}
+.mean-card .mh .mt{color:var(--navy);font-weight:800;font-size:1.02em;}
+.mean-card .md{color:#46506a;font-size:.84em;line-height:1.55;flex:1;}
+.mean-card .mrole{background:#eaf0fb;border-radius:7px;padding:.8em 1.1em;margin-top:1em;font-size:.82em;color:#46506a;line-height:1.45;}
+.mean-card .mrole b{color:var(--blue);font-weight:800;}
+
+/* ===== project 2/3 hero (p15,18) ===== */
+.hero-band{background:var(--navy);border-radius:8px;padding:1.5em 1.9em;margin-bottom:1.5em;display:flex;align-items:center;gap:1.6em;}
+.hero-band .seg{display:flex;flex-direction:column;gap:.5em;}
+.hero-band .tag-do{background:#3a4a72;color:#cfdbf2;font-weight:700;font-size:.78em;padding:.4em 1em;border-radius:999px;align-self:flex-start;}
+.hero-band .tag-res{background:var(--blue2);color:#fff;font-weight:700;font-size:.78em;padding:.4em 1em;border-radius:999px;align-self:flex-start;}
+.hero-band .htext{color:#fff;font-weight:800;font-size:1.1em;line-height:1.35;}
+.hero-band .harrow{color:var(--blue2);font-size:1.5em;font-weight:800;}
+.ov2{margin-bottom:1.5em;}
+.ov2 .label{margin-bottom:.6em;}
+.ov2 .box{background:#fff;border:1px solid var(--line);border-radius:8px;padding:1.4em 1.7em;color:#384155;font-size:.9em;line-height:1.65;}
+.kpi3{display:grid;grid-template-columns:repeat(3,1fr);gap:.9em;}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:8px;padding:1.5em .7em;text-align:center;}
+.kpi.dark{background:var(--navy);border-color:var(--navy);}
+.kpi .kv{color:var(--blue2);font-weight:800;font-size:1.5em;line-height:1.2;}
+.kpi.dark .kv{color:#fff;}
+.kpi .kd{color:var(--muted);font-size:.8em;margin-top:.5em;}
+.kpi.dark .kd{color:#aab6d0;}
+
+/* ===== capability summary (p20) ===== */
+.cap-dark{background:linear-gradient(160deg,#1B2A4A 0%,#22305a 100%);}
+.cap-dark .kicker .ttl{color:#fff;}
+.cap-dark .subhead{color:#aab6d0;}
+.cap-final{display:flex;flex-direction:column;gap:1em;flex:1;justify-content:center;}
+.cap-final .row{background:rgba(255,255,255,.05);border-radius:9px;padding:1.15em 1.6em;display:flex;align-items:center;gap:1.4em;}
+.cap-final .row .ic{width:3em;height:3em;border-radius:50%;background:var(--blue2);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.cap-final .row .ic svg{width:1.45em;height:1.45em;fill:#fff;}
+.cap-final .row .nm{color:#fff;font-weight:800;font-size:1.02em;min-width:11em;}
+.cap-final .row .ds{color:#bcc7de;font-size:.88em;line-height:1.45;}
+.cap-dark .pageno{color:#7e8aa6;}
+
+/* ===== thank you (p21) ===== */
+.thanks{background:linear-gradient(135deg,#16223d 0%,#1B2A4A 60%,#22376a 100%);}
+.thanks .slide-inner{justify-content:center;align-items:center;text-align:center;}
+.thanks .ty{color:#fff;font-size:2.6em;font-weight:800;letter-spacing:.04em;margin-bottom:.7em;}
+.thanks .tline{color:#cdd7ea;font-size:1.08em;font-weight:500;margin-bottom:1.6em;}
+.thanks .tcontact{color:#aebbd6;font-size:.95em;font-weight:500;line-height:2;}
+.thanks .tcontact b{color:#cadcfc;font-weight:700;}
+
+/* nav helper */
+.topbar{position:sticky;top:0;z-index:50;background:rgba(20,26,40,.92);backdrop-filter:blur(8px);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.topbar .tt{color:#dbe5f7;font-weight:700;font-size:14px;}
+.topbar .pp{display:flex;gap:6px;flex-wrap:wrap;}
+.topbar a{color:#aebbd6;font-size:12px;text-decoration:none;border:1px solid rgba(174,187,214,.3);border-radius:5px;padding:3px 8px;transition:.15s;}
+.topbar a:hover{color:#fff;border-color:#cadcfc;background:rgba(202,220,252,.12);}
+
+@media print{
+  body{background:#fff;}
+  .topbar{display:none;}
+  .deck{max-width:none;padding:0;}
+  .slide{margin:0;border-radius:0;box-shadow:none;page-break-after:always;break-after:page;}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="tt">김기현 · 사업기획 포트폴리오 2026</div>
+  <div class="pp">
+    <a href="#s1">표지</a><a href="#s2">목차</a><a href="#s3">커리어</a>
+    <a href="#s6">P1</a><a href="#s14">P2</a><a href="#s17">P3</a>
+    <a href="#s20">역량</a><a href="#s21">END</a>
+  </div>
+</div>
+
+<div class="deck">
+
+<!-- ===== 01 COVER ===== -->
+<section class="slide cover" id="s1"><div class="slide-inner">
+  <div class="eyebrow">BUSINESS PLANNING PORTFOLIO</div>
+  <h1>사업을 구조화하고<br>운영으로 완성하는 사업기획자</h1>
+  <div class="chips">
+    <span class="chip">운영 구조화·실행 설계</span>
+    <span class="chip">운영 KPI 관리</span>
+    <span class="chip">데이터 기반 의사결정</span>
+    <span class="chip">이해관계자 리딩</span>
+    <span class="chip">B2B · B2G</span>
+  </div>
+  <div class="who">
+    <div>
+      <div class="name">김기현</div>
+      <div class="role">사업기획 · PM / 경력 5년 7개월</div>
+    </div>
+    <div class="contact">✉ kimkhkh123@gmail.com<br>☎ 010-3669-9464</div>
+  </div>
+  <div class="pageno">01</div>
+</div></section>
+
+<!-- ===== 02 TOC ===== -->
+<section class="slide" id="s2"><div class="slide-inner">
+  <div class="kicker"><span class="num">00</span><span class="ttl">목차</span></div>
+  <div class="toc-band">B2C·B2B·B2G 전 영역에서 사업의 기획·운영·수익화를 직접 수행 — 시장 기회를 사업 성과로 연결해온 5년 7개월</div>
+  <div class="toc-list">
+    <div class="toc-row"><span class="n">01</span><span class="t">커리어 요약</span><span class="d">메시지 요약 · 경력 타임라인 · 역량 종합</span><span class="p">p.03</span></div>
+    <div class="toc-row"><span class="n">02</span><span class="t">Project 1 — 엘살바도르 국가 공교육 디지털 전환</span><span class="d">0에서 국가 단위 수익 사업으로</span><span class="p">p.06</span></div>
+    <div class="toc-row"><span class="n">03</span><span class="t">Project 2 — B2B 솔루션 사업 확장</span><span class="d">기존 운영 서비스를 외부 공급 상품으로 전환</span><span class="p">p.14</span></div>
+    <div class="toc-row"><span class="n">04</span><span class="t">Project 3 — 데이터 기반 상품기획</span><span class="d">데이터로 수요를 검증한 상품 설계</span><span class="p">p.16</span></div>
+    <div class="toc-row"><span class="n">05</span><span class="t">핵심 역량 종합</span><span class="d">프로젝트로 검증된 다섯 가지 역량</span><span class="p">p.18</span></div>
+  </div>
+  <div class="pageno">02</div>
+</div></section>
+
+<!-- ===== 03 CAREER SUMMARY ===== -->
+<section class="slide" id="s3"><div class="slide-inner">
+  <div class="kicker"><span class="num">01</span><span class="ttl">커리어 요약</span></div>
+  <div class="bighead">고객·기업·국가를 대상으로 사업모델 기획, 운영체계 구축, 성과관리까지 경험한 사업기획자입니다</div>
+  <div class="dark-box"><ul>
+    <li><b>B2C 상품기획 → B2B 사업개발 → B2G 국가사업</b> — 사업 단위를 확장하며 전 과정을 경험</li>
+    <li><b>전략 수립을 넘어 운영·데이터·회계까지 직접 실행</b> — 손익분기점 돌파·계약 확장으로 연결</li>
+    <li><b>국가 단위 신규 사업 운영 축 실무 리드</b> — 기준조차 없던 신규 사업에서 기준 및 운영방법을 체계화</li>
+  </ul></div>
+  <div class="label">핵심 역량</div>
+  <div class="cap-grid">
+    <div class="cap-card"><div class="cap-ic"><svg viewBox="0 0 24 24"><path d="M4 3h2v18H4zm3 1h11l-2 4 2 4H7z"/></svg></div><div class="nm">기준 수립·운영 구조화</div><div class="pj">Project 1</div></div>
+    <div class="cap-card"><div class="cap-ic"><svg viewBox="0 0 24 24"><path d="M3 17l5-5 4 4 7-7v4h2V6h-7v2h4l-6 6-4-4-7 7z"/></svg></div><div class="nm">데이터 기반 의사결정</div><div class="pj">Project 1·3</div></div>
+    <div class="cap-card"><div class="cap-ic"><svg viewBox="0 0 24 24"><path d="M12 2l9 5-9 5-9-5zM3 12l9 5 9-5M3 17l9 5 9-5"/></svg></div><div class="nm">프로세스 표준화</div><div class="pj">Project 1</div></div>
+    <div class="cap-card"><div class="cap-ic"><svg viewBox="0 0 24 24"><path d="M3 11l4-1 3 3 4-4 3 1 4-3v6l-4 2-3-1-4 4-3-3-4 1z"/></svg></div><div class="nm">이해관계자 리딩</div><div class="pj">Project 1·2</div></div>
+    <div class="cap-card"><div class="cap-ic"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 2c1.5 1.5 2.5 4 2.5 6S13.5 16.5 12 18c-1.5-1.5-2.5-4-2.5-6S10.5 5.5 12 4zM4 11h16M4 13h16"/></svg></div><div class="nm">사업 모델 확장·패키징</div><div class="pj">Project 1·2</div></div>
+  </div>
+  <div class="dir-band"><b>커리어 방향성</b>&nbsp;&nbsp;<span>고객과의 직접 접촉에서 시작하여, 규모 있는 신규 사업을 처음부터 끝까지 기획·실행하는 사업기획자로 성장하고 있습니다.</span></div>
+  <div class="pageno">03</div>
+</div></section>
+
+<!-- ===== 04 CAPABILITY TABLE ===== -->
+<section class="slide" id="s4"><div class="slide-inner">
+  <div class="kicker"><span class="num">01</span><span class="ttl">커리어 요약 — 역량 종합</span></div>
+  <div class="subhead">프로젝트 상세에 앞서, 수행 업무와 그로부터 확보한 직무 역량을 정리했습니다.</div>
+  <table class="cap-table">
+    <thead><tr><th>수행 업무</th><th>확보 역량</th><th>직무 적용</th></tr></thead>
+    <tbody>
+      <tr><td>신규 사업의 KPI 및 성공 기준을 정의하고 그에 맞는 운영 체계를 설계</td><td>사업 목표 구조화·성과 관리</td><td>사업기획 · 운영전략</td></tr>
+      <tr><td>정부·본사·현지 파트너 등 다자 이해관계 조율 및 협상을 지원</td><td>이해관계자 관리·협상 전략</td><td>사업개발 · 제휴</td></tr>
+      <tr><td>현장 데이터 기반 운영 리포팅 및 경영진 의사결정을 지원</td><td>데이터 기반 의사결정·리포팅</td><td>사업기획 · 데이터 분석</td></tr>
+      <tr><td>해외 지사 손익 구조 설계 및 수익성 관리</td><td>손익 설계·수익성 관리</td><td>사업기획 · 사업관리</td></tr>
+      <tr><td>신사업을 표준화하고 그 프로세스를 패키징하여 신규 시장 확장 기반을 마련</td><td>사업 모델 확장·표준화</td><td>사업전략 · 신사업</td></tr>
+      <tr><td>시장조사 및 수요 데이터 분석을 통해 상품 기획 및 사업화</td><td>수요 분석·상품 기획</td><td>상품기획 · 사업개발</td></tr>
+    </tbody>
+  </table>
+  <div class="pageno">04</div>
+</div></section>
+
+<!-- ===== 05 TIMELINE ===== -->
+<section class="slide" id="s5"><div class="slide-inner">
+  <div class="kicker"><span class="num">01</span><span class="ttl">커리어 요약 — 경력 타임라인</span></div>
+  <div class="subhead">단계마다 더 큰 사업을 맡으며, 상품기획 → 사업개발 → 국가사업 운영으로 역량을 누적해왔습니다.</div>
+  <div class="tl-list">
+    <div class="tl-row"><div class="tl-badge">B2C</div><div class="tl-date">2020.11 – 22.09</div><div class="tl-body"><div class="t">챔프스터디 · 해커스 교육그룹 · 공무원사업본부 기획팀 PL</div><div class="d">공무원 온라인 상품기획 및 학습·구매 데이터 분석</div></div><div class="tl-tag">데이터 기반 상품기획</div></div>
+    <div class="tl-row"><div class="tl-badge">B2C</div><div class="tl-date">2022.09 – 23.07</div><div class="tl-body"><div class="t">아이헤이트플라잉버그스 · B2C 교육운영 팀원</div><div class="d">학부모 설문 데이터로 구매 소구점 발굴 (Project 3)</div></div><div class="tl-tag">수요 분석·상품기획</div></div>
+    <div class="tl-row"><div class="tl-badge">B2B</div><div class="tl-date">2023.08 – 25.07</div><div class="tl-body"><div class="t">아이헤이트플라잉버그스 · B2B사업팀 팀장</div><div class="d">B2C 학습관리 서비스의 B2B 솔루션 사업화 · 5년 장기계약 전환에 기여 (Project 2)</div></div><div class="tl-tag">사업개발·이해관계자 리딩</div></div>
+    <div class="tl-row"><div class="tl-badge">B2G</div><div class="tl-date">2025.08 – 26.05</div><div class="tl-body"><div class="t">아이헤이트플라잉버그스 · 중남미사업팀 운영 PM</div><div class="d">엘살바도르 국가사업 운영·수익화 (Project 1)</div></div><div class="tl-tag">운영 구조화·수익성·확장</div></div>
+  </div>
+  <div class="pageno">05</div>
+</div></section>
+
+<!-- ===== 06 DIVIDER P1 ===== -->
+<section class="slide divider" id="s6"><div class="slide-inner">
+  <div class="pj">02 / PROJECT 1</div>
+  <h2>엘살바도르 국가 공교육<br>디지털 전환</h2>
+  <div class="pf">이 섹션이 증명하는 것 — 기준조차 없던 신규 사업을<br>0에서 국가 단위 수익 사업으로 가동했다.</div>
+  <div class="pageno">06</div>
+</div></section>
+
+<!-- ===== 07 P1 SUMMARY ===== -->
+<section class="slide" id="s7"><div class="slide-inner">
+  <div class="kicker"><span class="num">02</span><span class="ttl">Project 1 — 사업 요약</span></div>
+  <div class="overview">
+    <div class="h">사업 개요</div>
+    <p>엘살바도르 정부를 고객으로, 자사 교육 플랫폼을 전국 학교에 도입하여 실제 사용까지 정착시키는 국가단위 사업입니다. 회사 입장에서는 해외 신규 매출원과 글로벌 레퍼런스를 확보하여, 향후 사업 확장과 투자 유치의 발판을 마련하는 것이 목적이었습니다.</p>
+  </div>
+  <div class="persp"><b>사업기획 관점</b>&nbsp;&nbsp;사업 수주 직후 투입되어 운영체계 구축·수익화까지 신규 사업의 운영 전 과정을 직접 설계·실행하며, 초기 사업 셋업에 필요한 역량을 갖췄습니다.</div>
+  <div class="label">핵심 서사</div>
+  <div class="flow3">
+    <div class="flow-col"><div class="flow-head">1 · 기회와 문제</div><div class="flow-card"><div class="ft">국가 공교육 전체의<br>디지털 전환</div><div class="fhr"></div><div class="fd">400여 개 학교, 인프라·교사 역량 제각각<br>'도입 성공'을 판단할 기준 부재</div></div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-col"><div class="flow-head">2 · 실행</div><div class="flow-card"><div class="ft">기준을 세우고<br>운영을 표준화</div><div class="fhr"></div><div class="fd">도입 성공 기준·운영 매뉴얼 직접 설계<br>교사·관계자 교육<br>학교가 늘어도 작동하는 체계 구축</div></div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-col"><div class="flow-head">3 · 성과</div><div class="flow-card"><div class="ft">도입 완료에서<br>계약 확장까지</div><div class="fhr"></div><div class="fd">담당 400개교 전량 도입 완료<br>1,000개교로 계약 확장<br>수익 구조로 전환</div></div></div>
+  </div>
+  <div class="label">사업 규모 · 성과</div>
+  <div class="metrics">
+    <div class="metric"><div class="mv">전국 단위</div><div class="md">한 나라 공교육 전체 대상</div></div>
+    <div class="metric"><div class="mv">5 → 400개교</div><div class="md">파일럿에서 직접 도입까지 확대</div></div>
+    <div class="metric"><div class="mv">1,000개교 확장</div><div class="md">경쟁사 진입 차단·계약 확대</div></div>
+    <div class="metric dark"><div class="mv">손익분기점 돌파</div><div class="md">단일 해외 사업 수익 전환</div></div>
+  </div>
+  <div class="pageno">07</div>
+</div></section>
+
+<!-- ===== 08 P1 MAIN CONTRIB ===== -->
+<section class="slide" id="s8"><div class="slide-inner">
+  <div class="kicker"><span class="num">02</span><span class="ttl">Project 1 — 주요 기여</span></div>
+  <div class="subhead">각 영역에서 제가 직접 설계·실행한 역할을 중심으로 정리했습니다.</div>
+  <div class="contrib-grid">
+    <div class="contrib-card">
+      <div class="ch"><div class="cic"><svg viewBox="0 0 24 24"><path d="M4 3h2v18H4zm3 1h11l-2 4 2 4H7z"/></svg></div><div class="ctitle">① 기준 설계</div></div>
+      <div class="cmain">도입 성공의 기준을 직접 세우다</div>
+      <div class="csub">기준이 없던 현장을 측정 가능한 상태로 전환</div>
+      <div class="roles"><span class="role-d">역할 : KPI 정의·설계</span><span class="role-l">운영 구조화</span></div>
+    </div>
+    <div class="contrib-card">
+      <div class="ch"><div class="cic"><svg viewBox="0 0 24 24"><path d="M6 2h9l5 5v15H6zm9 1v4h4"/></svg></div><div class="ctitle">② 운영 보고</div></div>
+      <div class="cmain">경영·정부 협상을 지원하는 보고</div>
+      <div class="csub">복잡한 현장을 의사결정의 언어로 번역</div>
+      <div class="roles"><span class="role-d">역할 : 체계 구축·운영</span><span class="role-l">데이터 기반 의사결정</span></div>
+    </div>
+    <div class="contrib-card">
+      <div class="ch"><div class="cic"><svg viewBox="0 0 24 24"><path d="M12 3c-4 0-7 1-7 3v12c0 2 3 3 7 3s7-1 7-3V6c0-2-3-3-7-3zm0 2c3 0 5 .7 5 1s-2 1-5 1-5-.7-5-1 2-1 5-1z"/></svg></div><div class="ctitle">③ 회계 운영</div></div>
+      <div class="cmain">지사를 수익 구조로 전환하다</div>
+      <div class="csub">비용 구조를 설계해 손익분기점 돌파에 기여</div>
+      <div class="roles"><span class="role-d">역할 : 프로세스 설계·운영</span><span class="role-l">사업 수익성 관리</span></div>
+    </div>
+    <div class="contrib-card">
+      <div class="ch"><div class="cic"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 2c1.5 1.5 2.5 4 2.5 6S13.5 16.5 12 18c-1.5-1.5-2.5-4-2.5-6S10.5 5.5 12 4zM4 11h16M4 13h16"/></svg></div><div class="ctitle">④ 타국 패키징</div></div>
+      <div class="cmain">검증된 사업을 수출 패키지로</div>
+      <div class="csub">일회성 성과를 반복 가능한 자산으로 재구성</div>
+      <div class="roles"><span class="role-d">역할 : 상품기획·재구성</span><span class="role-l">사업 모델 확장</span></div>
+    </div>
+  </div>
+  <div class="pageno">08</div>
+</div></section>
+
+<!-- ===== 09 P1 DETAIL ① ===== -->
+<section class="slide" id="s9"><div class="slide-inner">
+  <div class="kicker"><span class="num">02</span><span class="ttl">Project 1 — 세부 기여 ①</span></div>
+  <div class="concl-wrap">
+    <span class="concl-tab">결론</span>
+    <div class="concl-box">
+      <div class="concl-ic"><svg viewBox="0 0 24 24"><path d="M4 3h2v18H4zm3 1h11l-2 4 2 4H7z"/></svg></div>
+      <div class="concl-text"><div class="h">도입 성공 기준(KPI)을 직접 정의하고, 담당 400개교 전량 달성했습니다.</div><div class="d">기준이 없던 현장을 측정 가능한 상태로 전환 — 명확한 KPI 설계가 곧 회사의 수익으로 이어집니다.</div></div>
+      <div class="concl-pill">검증 역량 · 운영 구조화</div>
+    </div>
+  </div>
+  <div class="evid-label">근거</div>
+  <div class="star3">
+    <div class="star-col"><div class="star-head">1 · 문제</div><div class="star-card"><div class="st">사업의 성공 기준(KPI)이 부재</div><div class="shr"></div><div class="sd">400여 개 학교는 인프라·교사 역량이 상이했고, '도입 성공'을 규정하는 KPI가 없어 성과와 수익을 판단·관리할 수 없었습니다.</div></div></div>
+    <div class="star-arrow">→</div>
+    <div class="star-col"><div class="star-head">2 · 실행</div><div class="star-card"><div class="st">서비스 본질에서 KPI를 도출·표준화</div><div class="shr"></div><div class="sd">플랫폼이 학교에서 '실제 학습에 활용되는 상태'를 도입 성공으로 정의하고, 이를 충족 기준·운영 매뉴얼로 직접 표준화했습니다.</div></div></div>
+    <div class="star-arrow">→</div>
+    <div class="star-col"><div class="star-head">3 · 성과</div><div class="star-card"><div class="st">정의한 기준으로 400개교 전량 달성</div><div class="shr"></div><div class="sd">제가 정의한 기준을 담당 400개교가 전량 충족해 정부 신뢰를 확보했고, 이는 계약 확장의 핵심 근거가 되었습니다.</div></div></div>
+  </div>
+  <div class="pageno">09</div>
+</div></section>
+
+<!-- ===== 10 P1 DETAIL ② ===== -->
+<section class="slide" id="s10"><div class="slide-inner">
+  <div class="kicker"><span class="num">02</span><span class="ttl">Project 1 — 세부 기여 ②</span></div>
+  <div class="concl-wrap">
+    <span class="concl-tab">결론</span>
+    <div class="concl-box">
+      <div class="concl-ic"><svg viewBox="0 0 24 24"><path d="M6 2h9l5 5v15H6zm9 1v4h4"/></svg></div>
+      <div class="concl-text"><div class="h">분산된 현장 데이터를 운영 리포팅 체계로 표준화해 계약 협상 근거를 확보했습니다.</div><div class="d">복잡한 현장을 의사결정의 언어로 번역 — 경영진이 정부 계약 협상의 핵심 근거로 활용했습니다.</div></div>
+      <div class="concl-pill">검증 역량 : 데이터 기반 의사결정</div>
+    </div>
+  </div>
+  <div class="evid-label">근거</div>
+  <div class="star3">
+    <div class="star-col"><div class="star-head">1 · 문제</div><div class="star-card"><div class="st">성과 입증 데이터가 분산</div><div class="shr"></div><div class="sd">현장 운영 데이터가 정리되지 않아, 경영진의 의사결정과 정부 협상에 활용할 근거가 부재했습니다.</div></div></div>
+    <div class="star-arrow">→</div>
+    <div class="star-col"><div class="star-head">2 · 실행</div><div class="star-card"><div class="st">운영 리포팅 체계 구축</div><div class="shr"></div><div class="sd">분산된 현장 데이터를 정기 운영 리포트로 표준화했고, 경영진이 정부 계약 협상의 핵심 근거로 활용했습니다.</div></div></div>
+    <div class="star-arrow">→</div>
+    <div class="star-col"><div class="star-head">3 · 성과</div><div class="star-card"><div class="st">계약 확장 협상의 근거 확보</div><div class="shr"></div><div class="sd">현장 데이터가 경영 의사결정과 대외 협상의 언어로 전환되었습니다.</div></div></div>
+  </div>
+  <div class="pageno">10</div>
+</div></section>
+
+<!-- ===== 11 P1 DETAIL ③ ===== -->
+<section class="slide" id="s11"><div class="slide-inner">
+  <div class="kicker"><span class="num">02</span><span class="ttl">Project 1 — 세부 기여 ③</span></div>
+  <div class="concl-wrap">
+    <span class="concl-tab">결론</span>
+    <div class="concl-box">
+      <div class="concl-ic"><svg viewBox="0 0 24 24"><path d="M12 3c-4 0-7 1-7 3v12c0 2 3 3 7 3s7-1 7-3V6c0-2-3-3-7-3zm0 2c3 0 5 .7 5 1s-2 1-5 1-5-.7-5-1 2-1 5-1z"/></svg></div>
+      <div class="concl-text"><div class="h">지사 손익 구조를 직접 설계·운영해 손익분기점(BEP) 달성에 기여했습니다.</div><div class="d">원가·정산 프로세스를 설계해 수익 기반을 마련 — 단일 해외 사업을 수익 구조로 전환했습니다.</div></div>
+      <div class="concl-pill">검증 역량 : 사업 수익성 관리</div>
+    </div>
+  </div>
+  <div class="evid-label">근거</div>
+  <div class="star3">
+    <div class="star-col"><div class="star-head">1 · 문제</div><div class="star-card"><div class="st">지사의 수익성 확보가 과제</div><div class="shr"></div><div class="sd">신규 해외 지사가 사업으로 지속되려면 자금 입출 관리와 손익 구조 확보가 전제되어야 했습니다.</div></div></div>
+    <div class="star-arrow">→</div>
+    <div class="star-col"><div class="star-head">2 · 실행</div><div class="star-card"><div class="st">원가 구조 분석·회계 프로세스 설계</div><div class="shr"></div><div class="sd">지사의 비용 구조를 분석하고 회계·정산 프로세스를 직접 설계·운영해 수익 기반을 마련했습니다.</div></div></div>
+    <div class="star-arrow">→</div>
+    <div class="star-col"><div class="star-head">3 · 성과</div><div class="star-card"><div class="st">BEP 달성의 회계 기반 확보</div><div class="shr"></div><div class="sd">제가 설계·운영한 회계 기반 위에서 매출이 투입 비용을 상회, 단일 해외 사업이 수익 구조로 전환되었습니다.</div></div></div>
+  </div>
+  <div class="pageno">11</div>
+</div></section>
+
+<!-- ===== 12 P1 DETAIL ④ ===== -->
+<section class="slide" id="s12"><div class="slide-inner">
+  <div class="kicker"><span class="num">02</span><span class="ttl">Project 1 — 세부 기여 ④</span></div>
+  <div class="concl-wrap">
+    <span class="concl-tab">결론</span>
+    <div class="concl-box">
+      <div class="concl-ic"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 2c1.5 1.5 2.5 4 2.5 6S13.5 16.5 12 18c-1.5-1.5-2.5-4-2.5-6S10.5 5.5 12 4zM4 11h16M4 13h16"/></svg></div>
+      <div class="concl-text"><div class="h">검증된 사업을 국가 무관 표준 패키지로 재구성해 반복 수출 자산의 기반을 닦았습니다</div><div class="d">엘살바도르 특화 모델을 어디든 적용 가능한 형태로 재설계 — 글로벌 수출 모델 다변화의 토대를 마련했습니다.</div></div>
+      <div class="concl-pill">검증 역량 : 사업 모델 확장 및 패키징</div>
+    </div>
+  </div>
+  <div class="evid-label">근거</div>
+  <div class="star3">
+    <div class="star-col"><div class="star-head">1 · 문제</div><div class="star-card"><div class="st">첫 국가 사업 운영 경험을 바탕으로, 후속 국가 확장을 위한 표준 운영체계 정비 과제 도출</div><div class="shr"></div><div class="sd">축적된 운영 모델이 엘살바도르에 특화되어, 타국 확장에 그대로 적용할 수 없었습니다.</div></div></div>
+    <div class="star-arrow">→</div>
+    <div class="star-col"><div class="star-head">2 · 실행</div><div class="star-card"><div class="st">국가 무관 표준 패키지로 재구성</div><div class="shr"></div><div class="sd">기준·매뉴얼·운영 방식을 국가에 무관하게 적용 가능한 표준 패키지로 직접 재구성했습니다.</div></div></div>
+    <div class="star-arrow">→</div>
+    <div class="star-col"><div class="star-head">3 · 성과</div><div class="star-card"><div class="st">반복 수출 가능한 자산으로 전환</div><div class="shr"></div><div class="sd">검증된 사업을 회사의 글로벌 수출 모델 다변화의 토대로 전환하는 데에 기여했습니다.</div></div></div>
+  </div>
+  <div class="pageno">12</div>
+</div></section>
+
+<!-- ===== 13 P1 BUSINESS MEANING ===== -->
+<section class="slide" id="s13"><div class="slide-inner">
+  <div class="kicker"><span class="num">02</span><span class="ttl">Project 1 — 사업적 의의</span></div>
+  <div class="subhead">운영 성과를 넘어, 이 사업의 전략적 가치를 만드는 데 제가 기여한 부분입니다.</div>
+  <div class="mean-grid">
+    <div class="mean-card">
+      <div class="mh"><div class="mic"><svg viewBox="0 0 24 24"><path d="M4 3h2v18H4zm3 1h11l-2 4 2 4H7z"/></svg></div><div class="mt">운영 성과로 정부 신뢰 입증</div></div>
+      <div class="md">수주 이후, 도입 성과를 실제 결과로 만들어 정부의 신뢰를 확보했습니다. 이 신뢰가 이후 계약 확장의 토대가 되었습니다.</div>
+      <div class="mrole"><b>내 역할</b>&nbsp;KPI 전량 달성·운영 리포팅으로 신뢰 근거를 직접 제공</div>
+    </div>
+    <div class="mean-card">
+      <div class="mh"><div class="mic"><svg viewBox="0 0 24 24"><path d="M3 11l4-1 3 3 4-4 3 1 4-3v6l-4 2-3-1-4 4-3-3-4 1z"/></svg></div><div class="mt">경쟁사 진입 차단 (Lock-in)</div></div>
+      <div class="md">도입 성과·학습·진도·출결 관리 데이터를 기반으로 계약 확장 및 경쟁사 진입을 차단했습니다.</div>
+      <div class="mrole"><b>내 역할</b>&nbsp;현장 데이터를 협상 근거로 가공해 계약 확장에 기여</div>
+    </div>
+    <div class="mean-card">
+      <div class="mh"><div class="mic"><svg viewBox="0 0 24 24"><path d="M12 3c-4 0-7 1-7 3v12c0 2 3 3 7 3s7-1 7-3V6c0-2-3-3-7-3zm0 2c3 0 5 .7 5 1s-2 1-5 1-5-.7-5-1 2-1 5-1z"/></svg></div><div class="mt">외부 자금으로 서비스 고도화</div></div>
+      <div class="md">B2C였다면 자사 비용으로 했어야 할 플랫폼 고도화를 정부 개발비로 수행, 그 결과물은 타국·B2B·B2C로 재활용 가능한 자산이 되었습니다.</div>
+      <div class="mrole"><b>내 역할</b>&nbsp;정부 개발비 기반 고도화 과제의 운영을 담당</div>
+    </div>
+    <div class="mean-card">
+      <div class="mh"><div class="mic"><svg viewBox="0 0 24 24"><path d="M12 2L2 7h20zM4 9v9h3V9zm6.5 0v9h3V9zM17 9v9h3V9zM2 20h20v2H2z"/></svg></div><div class="mt">정부 레퍼런스 확보</div></div>
+      <div class="md">국가 단위 공교육 사업을 성공·검증한 실적은, 향후 타 정부·공공기관 B2G 입찰의 직접적 자격 근거가 되는 회사 자산으로 남았습니다.</div>
+      <div class="mrole"><b>내 역할</b>&nbsp;사업 성공·검증의 운영 전 과정을 직접 수행</div>
+    </div>
+  </div>
+  <div class="pageno">13</div>
+</div></section>
+
+<!-- ===== 14 DIVIDER P2 ===== -->
+<section class="slide divider" id="s14"><div class="slide-inner">
+  <div class="pj">03 / PROJECT 2</div>
+  <h2>B2B 솔루션 사업 확장</h2>
+  <div class="pf">이 섹션이 증명하는 것 — 고객 니즈를 읽어 상품을 재설계하고,<br>단건 제휴를 장기 솔루션 사업으로 키웠다.</div>
+  <div class="pageno">14</div>
+</div></section>
+
+<!-- ===== 15 P2 OVERVIEW ===== -->
+<section class="slide" id="s15"><div class="slide-inner">
+  <div class="kicker"><span class="num">03</span><span class="ttl">Project 2 — B2B 솔루션 사업 확장</span></div>
+  <div class="hero-band">
+    <div class="seg"><span class="tag-do">수행</span><div class="htext">사업을 재정의하고 시장 기회를 발굴해 리포지셔닝</div></div>
+    <div class="harrow">→</div>
+    <div class="seg"><span class="tag-res">성과</span><div class="htext">5년 장기 공급계약 체결</div></div>
+  </div>
+  <div class="ov2">
+    <div class="label">사업 개요</div>
+    <div class="box">대형 교육기업과의 단기 협업으로 출발한 사업을, 장기 B2B 솔루션 사업으로 재설계했습니다.<br>상품 관련 지표 개선 및 패키징을 통해 자사 플랫폼을 새로운 수익 자산으로 전환하는 것이 목표였습니다.</div>
+  </div>
+  <div class="label">핵심 성과 지표</div>
+  <div class="kpi3">
+    <div class="kpi"><div class="kv">5년 계약</div><div class="kd">단건 제휴 → 장기 공급계약</div></div>
+    <div class="kpi"><div class="kv">동시접속 ↑</div><div class="kd">운영 규모 확대</div></div>
+    <div class="kpi dark"><div class="kv">완강률 개선</div><div class="kd">핵심 운영 지표 향상</div></div>
+  </div>
+  <div class="pageno">15</div>
+</div></section>
+
+<!-- ===== 16 P2 DETAIL ===== -->
+<section class="slide" id="s16"><div class="slide-inner">
+  <div class="kicker"><span class="num">03</span><span class="ttl">Project 2 — 세부기여</span></div>
+  <div class="subhead">단기 협업으로 출발한 사업을 재정의하고, 시장에서 기회를 발굴했습니다.</div>
+  <div class="star3" style="margin-top:auto;margin-bottom:auto;">
+    <div class="star-col"><div class="star-head">1 · 상황</div><div class="star-card"><div class="st">단기 협업으로 출발한 사업</div><div class="shr"></div><div class="sd">대형 교육기업과의 단기 협업으로 시작된 사업에, TF로 투입되어 장기 사업 관점으로 재정의 했습니다.</div></div></div>
+    <div class="star-arrow">→</div>
+    <div class="star-col"><div class="star-head">2 · 실행</div><div class="star-card"><div class="st">기회 발굴과 리포지셔닝</div><div class="shr"></div><div class="sd">운영 프로세스를 전면 개선하고 조직을 새로 구성했습니다. 그 과정에서 '제휴업체의 강의는 인기가 있지만 완강은 어렵다'는 시장 반응을 포착해, 학습관리 솔루션을 결합·리포지셔닝했습니다.</div></div></div>
+    <div class="star-arrow">→</div>
+    <div class="star-col"><div class="star-head">3 · 성과</div><div class="star-card"><div class="st">5년 장기 공급계약 체결</div><div class="shr"></div><div class="sd">단건 제휴가 장기 공급계약으로 전환되었고, 완강률 등 핵심 지표도 함께 개선되었습니다.</div></div></div>
+  </div>
+  <div class="pageno">16</div>
+</div></section>
+
+<!-- ===== 17 DIVIDER P3 ===== -->
+<section class="slide divider" id="s17"><div class="slide-inner">
+  <div class="pj">04 / PROJECT 3</div>
+  <h2>데이터 기반 상품기획</h2>
+  <div class="pf">이 섹션이 증명하는 것 — 부진하던 상품의 원인을 데이터로 규명해<br>성과를 직접 반전시켰다.</div>
+  <div class="pageno">17</div>
+</div></section>
+
+<!-- ===== 18 P3 OVERVIEW ===== -->
+<section class="slide" id="s18"><div class="slide-inner">
+  <div class="kicker"><span class="num">04</span><span class="ttl">Project 3 — 데이터 기반 상품기획</span></div>
+  <div class="hero-band">
+    <div class="seg"><span class="tag-do">수행</span><div class="htext">설문·판매 데이터로 구매 소구점을 발굴해 상품에 반영</div></div>
+    <div class="harrow">→</div>
+    <div class="seg"><span class="tag-res">성과</span><div class="htext">성과 반전, 사내 상위 10% 내 성과 달성</div></div>
+  </div>
+  <div class="ov2">
+    <div class="label">사업 개요</div>
+    <div class="box">고객 설문과 실제 판매 데이터를 분석해 구매를 유발하는 요인을 찾고, 상품 기획에 반영했습니다.<br>공급자가 아닌 수요 관점에서 상품을 설계하는 것이 목표였습니다.</div>
+  </div>
+  <div class="label">핵심 성과 지표</div>
+  <div class="kpi3">
+    <div class="kpi"><div class="kv">설문 + 판매</div><div class="kd">데이터 교차 분석</div></div>
+    <div class="kpi"><div class="kv">소구점 발굴</div><div class="kd">구매 유발 요인 도출</div></div>
+    <div class="kpi dark"><div class="kv">사내 상위 10% 내 성과 달성</div><div class="kd">2025년 1·2분기 연속</div></div>
+  </div>
+  <div class="pageno">18</div>
+</div></section>
+
+<!-- ===== 19 P3 DETAIL ===== -->
+<section class="slide" id="s19"><div class="slide-inner">
+  <div class="kicker"><span class="num">04</span><span class="ttl">Project 3 — 어떻게 했나</span></div>
+  <div class="subhead">부진하던 상품의 원인을 데이터로 찾아, 성과를 반전시켰습니다.</div>
+  <div class="star3" style="margin-top:auto;margin-bottom:auto;">
+    <div class="star-col"><div class="star-head">1 · 상황</div><div class="star-card"><div class="st">담당 상품의 성과 부진</div><div class="shr"></div><div class="sd">입사 후 첫 분기에 담당 서비스의 성과가 부진해, 직관이 아닌 데이터로 원인을 규명할 필요가 있었습니다.</div></div></div>
+    <div class="star-arrow">→</div>
+    <div class="star-col"><div class="star-head">2 · 실행</div><div class="star-card"><div class="st">설문·판매 데이터 교차 분석</div><div class="shr"></div><div class="sd">고객 설문과 실제 판매 데이터를 교차 분석해 구매 소구점을 도출하고, 여러 시도를 거쳐 상품 기획에 반영했습니다.</div></div></div>
+    <div class="star-arrow">→</div>
+    <div class="star-col"><div class="star-head">3 · 성과</div><div class="star-card"><div class="st">성과 반전, 사내 상위 약 15%</div><div class="shr"></div><div class="sd">성과가 반전되어 2025년 1·2분기 연속 사내 상위 약 15% 평가를 받았습니다.</div></div></div>
+  </div>
+  <div class="pageno">19</div>
+</div></section>
+
+<!-- ===== 20 CAPABILITY FINAL ===== -->
+<section class="slide cap-dark" id="s20"><div class="slide-inner">
+  <div class="kicker"><span class="num">05</span><span class="ttl">핵심 역량 종합</span></div>
+  <div class="subhead">세 프로젝트를 통해 일관되게 검증된 다섯 가지 역량입니다.</div>
+  <div class="cap-final">
+    <div class="row"><div class="ic"><svg viewBox="0 0 24 24"><path d="M4 3h2v18H4zm3 1h11l-2 4 2 4H7z"/></svg></div><div class="nm">기준 수립·운영 구조화</div><div class="ds">기준이 없는 신규 사업·신규 거점을, 측정 가능한 운영 체계로 설계해 실행 가능하게 만든다</div></div>
+    <div class="row"><div class="ic"><svg viewBox="0 0 24 24"><path d="M3 17l5-5 4 4 7-7v4h2V6h-7v2h4l-6 6-4-4-7 7z"/></svg></div><div class="nm">데이터 기반 의사결정</div><div class="ds">분산된 현장·고객 데이터를 경영 의사결정과 협상의 근거로 전환한다</div></div>
+    <div class="row"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 2l9 5-9 5-9-5zM3 12l9 5 9-5M3 17l9 5 9-5"/></svg></div><div class="nm">프로세스 표준화</div><div class="ds">담당자가 바뀌어도 유지되는 구조를 구축해 사업의 확장성을 확보한다</div></div>
+    <div class="row"><div class="ic"><svg viewBox="0 0 24 24"><path d="M3 11l4-1 3 3 4-4 3 1 4-3v6l-4 2-3-1-4 4-3-3-4 1z"/></svg></div><div class="nm">이해관계자 리딩</div><div class="ds">경영진·고객·정부 등 입장이 다른 다자를 단일 목표와 계약으로 정렬한다</div></div>
+    <div class="row"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 2c1.5 1.5 2.5 4 2.5 6S13.5 16.5 12 18c-1.5-1.5-2.5-4-2.5-6S10.5 5.5 12 4zM4 11h16M4 13h16"/></svg></div><div class="nm">사업 모델 확장·패키징</div><div class="ds">검증된 사업을 반복 가능한 자산으로 재구성해 새로운 시장·고객으로 확장한다</div></div>
+  </div>
+  <div class="pageno">20</div>
+</div></section>
+
+<!-- ===== 21 THANK YOU ===== -->
+<section class="slide thanks" id="s21"><div class="slide-inner">
+  <div class="ty">THANK YOU</div>
+  <div class="tline">사업을 구조화하고 운영으로 완성하는 사업기획자 &nbsp;김기현</div>
+  <div class="tcontact"><b>E</b> kimkhkh123@gmail.com&nbsp;&nbsp;&nbsp;&nbsp;<b>T</b> 010-3669-9464</div>
+</div></section>
+
+</div>
+</body>
+</html>
